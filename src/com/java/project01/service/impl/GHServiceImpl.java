@@ -1,5 +1,6 @@
 package com.java.project01.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.java.project01.service.GHService;
@@ -10,46 +11,74 @@ import com.java.project01.vo.Room;
 import com.java.project01.vo.parent.Event;
 
 public class GHServiceImpl implements GHService{
+	private static GHServiceImpl service = new GHServiceImpl();
+	List<Reservation> reservations = null;
+	List<Room> rooms = null;
+	List<Event> events = null;
 	
+	/**
+	 *  @param minCount 최소 인원 4명
+	 *  @param maxCount 최대 인원 20명
+	 */
+	public static final int minCount = 4;
+	public static final int maxCount = 20;
 	
+	private GHServiceImpl() {
+		reservations = new ArrayList<>();
+		rooms = new ArrayList<>();
+		events = new ArrayList<>();
+	}
 	
+	public static GHServiceImpl getInstance() {
+		return service;
+	}
 	
 	//CRUD
 	@Override
-	public void Reservation(MyDate date, Customer customer, Room room, boolean isBreakfast, int people, Event event,
-			int reserveCode) {
-		// TODO Auto-generated method stub
-		
+	public void addReservation(MyDate date, Customer customer, Room room, boolean isBreakfast, int people, int reserveCode) {
+		reservations.add(new Reservation(reserveCode, room, date, customer, isBreakfast, people));
 	}
 	
 	@Override
 	public List<Room> getAllRooms() {
-		// TODO Auto-generated method stub
-		return null;
+		return rooms;
 	}
 	
 	@Override
 	public List<Event> getAllEvents() {
-		// TODO Auto-generated method stub
-		return null;
+		return events;
 	}
 	
 	@Override
 	public Reservation checkMyReserve(int code) {
-		// TODO Auto-generated method stub
+		for (Reservation r : reservations) {
+			if (r.getReserveCode() == code) {
+				return r;
+			}
+		}
 		return null;
 	}
 	
 	@Override
 	public void deleteReserve(int code) {
-		// TODO Auto-generated method stub
+		boolean isDeleted = false;
 		
+		for (Reservation r : reservations) {
+			if (r.getReserveCode() == code) {
+				isDeleted = reservations.remove(r);
+			}
+		}
+		
+		System.out.println(isDeleted ? "삭제 완료" : "해당 예약 번호가 없습니다.");
 	}
 	
 	@Override
 	public void updateReserve(int code, Reservation reserve) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < reservations.size(); i++) {
+			if (reservations.get(i).getReserveCode() == code) {
+				reservations.set(i, reserve);
+			}
+		}
 	}
 	
 	

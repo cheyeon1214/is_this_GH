@@ -24,21 +24,50 @@ public class MyDate {
 		this.day = day;
 	}
 	
+	/**
+	 * 
+	 * @return 연도 반환
+	 */
 	public int getYear() {
 		return year;
 	}
+	
+	/**
+	 * 
+	 * @param year 연도 입력
+	 */
 	public void changeYear(int year) {
 		this.year = year;
 	}
+	
+	/**
+	 * 
+	 * @return 월 반환
+	 */
 	public int getMonth() {
 		return month;
 	}
+	
+	/**
+	 * 
+	 * @param month 월 입력
+	 */
 	public void changeMonth(int month) {
 		this.month = month;
 	}
+	
+	/**
+	 * 
+	 * @return 일 반환
+	 */
 	public int getDay() {
 		return day;
 	}
+	
+	/**
+	 * 
+	 * @param day 일 입력
+	 */
 	public void changeDay(int day) {
 		this.day = day;
 	}

@@ -2,7 +2,7 @@ package com.java.project01.util;
 
 /**
  *  MyTime Class
- *  - 시, 분, 초
+ *  - 시간을 관리하는 클래스입니다.
  */
 public class MyTime {
 	
@@ -10,6 +10,14 @@ public class MyTime {
 	private int minute;
 	private int seconds;
 	
+	public MyTime() {}
+	
+	/**
+	 * MyTime 생성자
+	 * @param hour 시간
+	 * @param minute 분
+	 * @param seconds 초
+	 */
 	public MyTime(int hour, int minute, int seconds) {
 		this.hour = hour;
 		this.minute = minute;
@@ -19,19 +27,19 @@ public class MyTime {
 	public int getHour() {
 		return hour;
 	}
-	public void setHour(int hour) {
+	public void changeHour(int hour) {
 		this.hour = hour;
 	}
 	public int getMinute() {
 		return minute;
 	}
-	public void setMinute(int minute) {
+	public void changeMinute(int minute) {
 		this.minute = minute;
 	}
 	public int getSeconds() {
 		return seconds;
 	}
-	public void setSecond(int seconds) {
+	public void changeSeconds(int seconds) {
 		this.seconds = seconds;
 	}
 	

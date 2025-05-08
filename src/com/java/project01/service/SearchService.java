@@ -7,7 +7,7 @@ import com.java.project01.vo.Reservation;
 import com.java.project01.vo.Room;
 import com.java.project01.vo.parent.Event;
 /**
- * 예약 조회와 관련된 서비스 인터페이스
+ * 조회와 관련된 서비스 인터페이스
  */
 public interface SearchService {
 	/**

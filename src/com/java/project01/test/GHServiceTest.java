@@ -1,6 +1,6 @@
 package com.java.project01.test;
 
-public class test {
+public class GHServiceTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

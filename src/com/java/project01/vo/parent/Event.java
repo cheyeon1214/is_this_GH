@@ -4,7 +4,6 @@ import com.java.project01.util.MyTime;
 
 public abstract class Event {
 	
-	
 	private int price;
 	private String eventType;
 	private MyTime startTime;
@@ -40,11 +39,20 @@ public abstract class Event {
 		this.price = price;
 	}
 	
+	
+	/**
+	 * 
+	 * @return 이벤트 종류 반환
+	 */
 	public String getEventType() {
 		return eventType;
 	}
 	
-	public void changeEventType() {
+	/**
+	 * 
+	 * @param eventType 이벤트 종류
+	 */
+	public void changeEventType(String eventType) {
 		this.eventType = eventType;
 	}
 	

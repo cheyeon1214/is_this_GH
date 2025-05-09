@@ -157,30 +157,41 @@ public class GHServiceTest {
 				System.out.println("예약자분 성함: ");
 				String nameString = sc.next();
 				System.out.println("예약자분 성별(여/남): ");
-				String input = sc.next();
+				String input = "";
 				char gender;
 
-				if (input.equals("여")) {
-				    gender = 'f';
-				} else if (input.equals("남")) {
-				    gender = 'm';
-				} else {
-				    gender = 'u'; // unknown 혹은 예외 처리
+				while(true) {
+					input = sc.next();
+					if (input.equals("여")) {
+					    gender = 'f';
+					    break;
+					} else if (input.equals("남")) {
+					    gender = 'm';
+					    break;
+					} else {
+					    System.out.println("다시 입력해주세요.");
+					}
 				}
-				System.out.println("인원수: ");
+				
+				System.out.println("인원수(혼성 예약 불가): ");
 				int countPeople = sc.nextInt();
 				
 				System.out.println("예약자분 전화번호: ");
 				String phoneString = sc.next();
 				
 				System.out.println("**원하시는 방을 입력해주세요**");
+				
+				System.out.println(input+"성 전용 방 리스트입니다.");
 				List<Room> roomList = service.getAllRooms();
+				
 				int i=1;
 				HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
 				
 				for(Room r: roomList) {
-					System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
-					i++;
+					if(r.getGender() == gender) {
+						System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+						i++;
+					}
 				}
 				
 				Room reserveRoom = null;
@@ -189,28 +200,22 @@ public class GHServiceTest {
 				while (!validRoom) {
 				    int roomChoice = sc.nextInt();
 
-				    switch(roomChoice) {
-				        case 1:
-				            reserveRoom = roomList.get(0);
-				            validRoom = true;
-				            break;
-				        case 2:
-				            reserveRoom = roomList.get(1);
-				            validRoom = true;
-				            break;
-				        case 3:
-				            reserveRoom = roomList.get(2);
-				            validRoom = true;
-				            break;
-				        case 4:
-				            reserveRoom = roomList.get(3);
-				            validRoom = true;
-				            break;
-				        default:
-				            System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");
-				            break;
+				    if (roomChoice < 1 || roomChoice > roomList.size()) {
+				        System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");
+				        continue;
+				    }
+
+				    Room selectedRoom = roomList.get(roomChoice - 1);
+				    int currentCount = roomMapByDate.getOrDefault(selectedRoom, 0);
+
+				    if (currentCount + countPeople > selectedRoom.getMaxCount()) {
+				        System.out.println("인원수가 가득 찼습니다. 다시 입력해주세요.");
+				    } else {
+				        reserveRoom = selectedRoom;
+				        validRoom = true;
 				    }
 				}
+				
 				System.out.println("방 선택이 완료되었습니다. 다음은 부가서비스 안내입니다.");
 				Boolean isBreakfast = false;
 				while (true) {
@@ -224,7 +229,7 @@ public class GHServiceTest {
 				        isBreakfast = false;
 				        break;
 				    } else {
-				        System.out.println("잘못된 입력입니다. 다시 입력해주세요. (네 또는 아니요)");
+				        System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 				    }
 				}
 				
@@ -250,28 +255,22 @@ public class GHServiceTest {
 						while (!validEvent) {
 						    int eventChoice = sc.nextInt();
 
-						    switch(eventChoice) {
-						        case 1:
-						            reserveEvent = eventList.get(0);
-						            validEvent = true;
-						            break;
-						        case 2:
-						        	reserveEvent = eventList.get(1);
-						            validEvent = true;
-						            break;
-						        case 3:
-						        	reserveEvent = eventList.get(2);
-						            validEvent = true;
-						            break;
-						        case 4:
-						        	reserveEvent = eventList.get(3);
-						            validEvent = true;
-						            break;
-						        default:
-						            System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");
-						            break;
+						    if (eventChoice < 1 || eventChoice > eventList.size()) {
+						        System.out.println("입력하신 번호의 이벤트는 존재하지 않습니다. 다시 입력해주세요.");
+						        continue;
+						    }
+
+						    Event selectedEvent = eventList.get(eventChoice - 1);
+						    int current_Count = eventMapByDate.getOrDefault(selectedEvent, 0);
+
+						    if (current_Count + countPeople > GHServiceImpl.EVENT_MAX_COUNT) {
+						        System.out.println("인원수가 가득 찼습니다. 다시 입력해주세요.");
+						    } else {
+						        reserveEvent = selectedEvent;
+						        validEvent = true;
 						    }
 						}
+						
 						System.out.println(reserveEvent.getEventType()+"이벤트 예약 정보가 저장되었습니다.");
 						break;
 					}else if(booleanEvent.equals("아니요")) {

@@ -196,14 +196,39 @@ public class GHServiceImpl implements GHService{
 
 	@Override
 	public List<Event> eventsByDate(MyDate date) {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<Event, Integer> eventsHeadCount = new HashMap<>();
+		List<Reservation> dateReserve = new ArrayList<>();
+		
+		for (Event e : events) {
+			eventsHeadCount.put(e, 0);
+		}
+		
+		for (Reservation r : reservations) {
+			if (r.getDate().equals(date))  {
+				dateReserve.add(r);
+			}
+		}
+		
+		for (Reservation r : dateReserve) {			
+			eventsHeadCount.put(r.getEvent(), eventsHeadCount.get(r.getEvent()) + r.getPeople());
+		}
+		
+		List<Event> leftEvents = new ArrayList<>();
+		
+		for (Event r : events) {
+			if (eventsHeadCount.get(r) < EVENT_MAX_COUNT) {
+				leftEvents.add(r);
+			}
+		}
+		
+		return leftEvents;
 	}
 
 	@Override
 	public String getBreakfastInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		String breakfastInfo = "";
+		
+		return breakfastInfo;
 	}
 
 }

@@ -61,7 +61,7 @@ public class GHServiceTest {
 				break;
 			case "4":
 				System.out.println("예약 번호를 입력해주세요");
-				service.updateReserve(1000, new Reservation(1000, new Room("1029방", 19000, "더블룸이고 화장실이 안에있습니다. 쾌적합니다.", 'f', 4, "침대2, 화장실1"),new MyDate(2025,5,5), new Customer("곽채연", 'f', "010-5582-1857"), true, 2));
+				//service.updateReserve(1000, new Reservation(1000, new Room("1029방", 19000, "더블룸이고 화장실이 안에있습니다. 쾌적합니다.", 'f', 4, "침대2, 화장실1"),new MyDate(2025,5,5), new Customer("곽채연", 'f', "010-5582-1857"), true, 2));
 				System.out.println(service.getAllReservations());
 				break;
 			case "5":
@@ -154,37 +154,35 @@ public class GHServiceTest {
 				String phoneString = sc.next();
 				
 				System.out.println("**원하시는 방을 입력해주세요**");
-				//List<Room> roomList = service.getAllRooms();
+				List<Room> roomList = service.getAllRooms();
 				int i=1;
-				//HashMap으로 수정 필요
 				HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
-				for(Room room : roomMapByDate.keySet()) {
-					System.out.println(i+". "+room.getName()+"("+roomMapByDate.get(room)+"/"+service.getAllRooms().get(i-1).getMaxCount()+")");
-					i++;
+				
+				for(Room r: roomList) {
+					System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
 				}
 				
 				Room reserveRoom = null;
 				boolean validRoom = false;
-				
 
 				while (!validRoom) {
 				    int roomChoice = sc.nextInt();
 
 				    switch(roomChoice) {
 				        case 1:
-				            reserveRoom = service.getAllRooms().get(0);
+				            reserveRoom = roomList.get(0);
 				            validRoom = true;
 				            break;
 				        case 2:
-				            reserveRoom = service.getAllRooms().get(1);
+				            reserveRoom = roomList.get(1);
 				            validRoom = true;
 				            break;
 				        case 3:
-				            reserveRoom = service.getAllRooms().get(2);
+				            reserveRoom = roomList.get(2);
 				            validRoom = true;
 				            break;
 				        case 4:
-				            reserveRoom = service.getAllRooms().get(3);
+				            reserveRoom = roomList.get(3);
 				            validRoom = true;
 				            break;
 				        default:
@@ -210,8 +208,57 @@ public class GHServiceTest {
 				}
 				
 				System.out.println("조식 신청이 완료되었습니다.");
-				System.out.println("다음은 이벤트 목록입니다. 이벤트를 신청하고 싶으시다면 번호를 눌러주세요");
-				//이벤트 처리
+				Event reserveEvent = null;
+				while(true) {
+					System.out.println("다음은 이벤트 신청입니다. 이벤트를 신청하시겠습니까?(네/아니요)");
+					String booleanEvent = sc.next();  
+					if(booleanEvent.equals("네")) {
+						System.out.println("원하시는 이벤트 번호를 입력해주세요.");
+						List<Event> eventList = service.getAllEvents();
+						int j = 1;
+						HashMap<Event,Integer> eventMapByDate = service.eventsByDate(wantDate);
+						
+						for(Event e: eventList) {
+							System.out.println(i+". "+e.getEventType() + "("+ eventMapByDate.get(e)+"/"+GHServiceImpl.EVENT_MAX_COUNT+")");
+						}
+						
+						
+						boolean validEvent = false;
+
+						while (!validEvent) {
+						    int eventChoice = sc.nextInt();
+
+						    switch(eventChoice) {
+						        case 1:
+						            reserveEvent = eventList.get(0);
+						            validEvent = true;
+						            break;
+						        case 2:
+						        	reserveEvent = eventList.get(1);
+						            validEvent = true;
+						            break;
+						        case 3:
+						        	reserveEvent = eventList.get(2);
+						            validEvent = true;
+						            break;
+						        case 4:
+						        	reserveEvent = eventList.get(3);
+						            validEvent = true;
+						            break;
+						        default:
+						            System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");
+						            break;
+						    }
+						}
+						System.out.println(reserveEvent.getEventType()+"이벤트 예약 정보가 저장되었습니다.");
+						break;
+					}else if(booleanEvent.equals("아니요")) {
+						break;
+					}else {
+						System.out.println("다시 입력해주세요");
+					}
+				}
+				
 				Set<Integer> usedCodes = new HashSet<>();
 				for (Reservation r : service.getAllReservations()) {
 				    usedCodes.add(r.getReserveCode()); 
@@ -231,8 +278,10 @@ public class GHServiceTest {
 				    reserveRoom,
 				    isBreakfast,
 				    countPeople,
-				    newCode 
+				    newCode,
+				    reserveEvent
 				);
+				
 				System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.");
 				
 				System.out.println(service.getAllReservations());

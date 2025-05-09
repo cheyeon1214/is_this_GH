@@ -46,8 +46,8 @@ public class GHServiceImpl implements GHService{
 	}
 	
 	@Override
-	public void addReservation(MyDate date, Customer customer, Room room, boolean isBreakfast, int people, int reserveCode) {
-		reservations.add(new Reservation(reserveCode, room, date, customer, isBreakfast, people));
+	public void addReservation(MyDate date, Customer customer, Room room, boolean isBreakfast, int people, int reserveCode, Event event) {
+		reservations.add(new Reservation(reserveCode, room, date, customer, isBreakfast, people, event));
 	}
 	
 	@Override

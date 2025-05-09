@@ -13,9 +13,12 @@ public class FishingEvent extends Event{
 	
 	public FishingEvent() {}
 	/**
-	 * FishingEvent 생성자
-	 * @param isBoat 배 사용유무
-	 * @param area 낚시지역
+	 * 
+	 * @param eventType 이벤트 종류
+	 * @param startTime 이벤트 시작 시간
+	 * @param endTime 이벤트 종료 시간
+	 * @param isBoat 낚시 보트 탑승 여부
+	 * @param area 낚시 지역
 	 */
 	public FishingEvent(String eventType, MyTime startTime, MyTime endTime, boolean isBoat, String area) {
 		super(eventType, startTime, endTime);

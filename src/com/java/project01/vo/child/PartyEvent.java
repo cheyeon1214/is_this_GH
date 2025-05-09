@@ -2,6 +2,7 @@ package com.java.project01.vo.child;
 
 import com.java.project01.util.MyTime;
 import com.java.project01.vo.parent.Event;
+
 /**
  * 파티와 관련된 클래스
  */
@@ -10,10 +11,13 @@ public class PartyEvent extends Event{
 	private String food;
 	
 	public PartyEvent() {}
+
 	/**
-	 * PartyEvent 생성자
-	 * @param type 파티 유형
-	 * @param food 파티 음식
+	 * 
+	 * @param eventType 이벤트 종류
+	 * @param startTime 이벤트 시작 시간
+	 * @param endTime 이벤트 종료 시간
+	 * @param food 음식 종류
 	 */
 	public PartyEvent(String eventType, MyTime startTime, MyTime endTime, String food) {
 		super(eventType, startTime, endTime);
@@ -48,7 +52,7 @@ public class PartyEvent extends Event{
 	 * 파티 음식을 변경하는 setter
 	 * @param food 파티음식
 	 */
-	public void setFood(String food) {
+	public void changeFood(String food) {
 		this.food = food;
 	}
 

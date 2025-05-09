@@ -2,7 +2,9 @@ package com.java.project01.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -145,17 +147,19 @@ public class GHServiceTest {
 				} else {
 				    gender = 'u'; // unknown 혹은 예외 처리
 				}
+				System.out.println("인원수: ");
+				int countPeople = sc.nextInt();
 				
 				System.out.println("예약자분 전화번호: ");
 				String phoneString = sc.next();
 				
 				System.out.println("**원하시는 방을 입력해주세요**");
-				List<Room> roomList = service.getAllRooms();
+				//List<Room> roomList = service.getAllRooms();
 				int i=1;
 				//HashMap으로 수정 필요
 				HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
 				for(Room room : roomMapByDate.keySet()) {
-					System.out.println(i+". "+room.getName()+"("+roomMapByDate.get(room)+"/"+roomList.get(i-1).getMaxCount()+")");
+					System.out.println(i+". "+room.getName()+"("+roomMapByDate.get(room)+"/"+service.getAllRooms().get(i-1).getMaxCount()+")");
 					i++;
 				}
 				
@@ -168,19 +172,19 @@ public class GHServiceTest {
 
 				    switch(roomChoice) {
 				        case 1:
-				            reserveRoom = roomList.get(0);
+				            reserveRoom = service.getAllRooms().get(0);
 				            validRoom = true;
 				            break;
 				        case 2:
-				            reserveRoom = roomList.get(1);
+				            reserveRoom = service.getAllRooms().get(1);
 				            validRoom = true;
 				            break;
 				        case 3:
-				            reserveRoom = roomList.get(2);
+				            reserveRoom = service.getAllRooms().get(2);
 				            validRoom = true;
 				            break;
 				        case 4:
-				            reserveRoom = roomList.get(3);
+				            reserveRoom = service.getAllRooms().get(3);
 				            validRoom = true;
 				            break;
 				        default:
@@ -207,9 +211,30 @@ public class GHServiceTest {
 				
 				System.out.println("조식 신청이 완료되었습니다.");
 				System.out.println("다음은 이벤트 목록입니다. 이벤트를 신청하고 싶으시다면 번호를 눌러주세요");
+				//이벤트 처리
+				Set<Integer> usedCodes = new HashSet<>();
+				for (Reservation r : service.getAllReservations()) {
+				    usedCodes.add(r.getReserveCode()); 
+				}
+
+				Random random = new Random();
+				int newCode;
+
+				do {
+				    newCode = random.nextInt(9000) + 1000; // 1000 ~ 9999
+				} while (usedCodes.contains(newCode));
+
+				// 예약 추가
+				service.addReservation(
+				    wantDate,
+				    new Customer(nameString, gender, phoneString),
+				    reserveRoom,
+				    isBreakfast,
+				    countPeople,
+				    newCode 
+				);
+				System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.");
 				
-				
-				service.addReservation(wantDate, new Customer("곽채연", 'f', "010-5582-1857"), new Room("1029방", 19000, "더블룸이고 화장실이 안에있습니다. 쾌적합니다.", 'f', 4, "침대2, 화장실1"), false, 2, 1000);
 				System.out.println(service.getAllReservations());
 				reserveFlag =false;
 				break;

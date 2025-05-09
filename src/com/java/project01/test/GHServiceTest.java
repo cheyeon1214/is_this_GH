@@ -119,29 +119,78 @@ public class GHServiceTest {
 				System.out.println("**사용자 정보를 입력해주세요**");
 				System.out.println("예약자분 성함: ");
 				String nameString = sc.next();
-				System.out.println("예약자분 성별: ");
-				String genderString = sc.next();
+				System.out.println("예약자분 성별(여/남): ");
+				String input = sc.next();
+				char gender;
+
+				if (input.equals("여")) {
+				    gender = 'f';
+				} else if (input.equals("남")) {
+				    gender = 'm';
+				} else {
+				    gender = 'u'; // unknown 혹은 예외 처리
+				}
+				
 				System.out.println("예약자분 전화번호: ");
 				String phoneString = sc.next();
 				
 				System.out.println("**원하시는 방을 입력해주세요**");
+				
+				int i=1;
+				//수정 필요
 				for(Room room : service.roomsByDate(wantDate)) {
-					System.out.println(room);
+					System.out.println(i+". "+room);
+					i++;
 				}
 				
-				Room room = null;
-				switch(sc.nextInt()) {
-				case 1:
-					room = r1;
-					break;
-				case 2: 
-					break; 
-				case 3:
-					break;
-				case 4:
-					break;
-				default:
+				Room reserveRoom = null;
+				boolean validRoom = false;
+
+				while (!validRoom) {
+				    int roomChoice = sc.nextInt();
+
+				    switch(roomChoice) {
+				        case 1:
+				            reserveRoom = r1;
+				            validRoom = true;
+				            break;
+				        case 2:
+				            reserveRoom = r2;
+				            validRoom = true;
+				            break;
+				        case 3:
+				            reserveRoom = r3;
+				            validRoom = true;
+				            break;
+				        case 4:
+				            reserveRoom = r4;
+				            validRoom = true;
+				            break;
+				        default:
+				            System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");
+				            break;
+				    }
 				}
+				System.out.println("방 선택이 완료되었습니다. 다음은 부가서비스 안내입니다.");
+				Boolean isBreakfast = false;
+				while (true) {
+				    System.out.println("조식을 신청하시겠습니까? (네/아니요)");
+				    String inputBoolean = sc.next();
+
+				    if (inputBoolean.equals("네")) {
+				        isBreakfast = true;
+				        break;
+				    } else if (inputBoolean.equals("아니요")) {
+				        isBreakfast = false;
+				        break;
+				    } else {
+				        System.out.println("잘못된 입력입니다. 다시 입력해주세요. (네 또는 아니요)");
+				    }
+				}
+				
+				System.out.println("조식 신청이 완료되었습니다.");
+				System.out.println("다음은 이벤트 목록입니다. 이벤트를 신청하고 싶으시다면 번호를 눌러주세요");
+				
 				
 				service.addReservation(wantDate, new Customer("곽채연", 'f', "010-5582-1857"), new Room("1029방", 19000, "더블룸이고 화장실이 안에있습니다. 쾌적합니다.", 'f', 4, "침대2, 화장실1"), false, 2, 1000);
 				System.out.println(service.getAllReservations());

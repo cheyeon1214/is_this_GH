@@ -34,18 +34,15 @@ public class Room {
 	 * @param maxCount
 	 * @param minCount
 	 * @param funiture
-	 * @param isSoldOut
 	 */
 	public Room(String name, double price,	String info, char gender, int maxCount,	
-			int headCount, String funiture, boolean isSoldOut) {
+			 String funiture) {
 		this.name = name;
 		this.price = price;
 		this.info = info;
 		this.gender = gender;
 		this.maxCount = maxCount;
-		this.headCount = headCount;
 		this.funiture = funiture;
-		this.isSoldOut = isSoldOut;
 	}
 	
 	/**

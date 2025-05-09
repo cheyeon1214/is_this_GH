@@ -17,11 +17,11 @@ public class GHServiceImpl implements GHService{
 	List<Event> events = null;
 	
 	/**
-	 *  @param minCount 최소 인원 4명
-	 *  @param maxCount 최대 인원 20명
+	 *  @param EVENT_MIN_COUNT 최소 인원 4명
+	 *  @param EVENT_MAX_COUNT 최대 인원 20명
 	 */
-	public static final int minCount = 4;
-	public static final int maxCount = 20;
+	public static final int EVENT_MIN_COUNT = 4;
+	public static final int EVENT_MAX_COUNT = 20;
 	
 	private GHServiceImpl() {
 		reservations = new ArrayList<>();
@@ -47,6 +47,9 @@ public class GHServiceImpl implements GHService{
 	@Override
 	public List<Event> getAllEvents() {
 		return events;
+	}
+	public List<Reservation> getAllReservations(){
+		return reservations;
 	}
 	
 	@Override

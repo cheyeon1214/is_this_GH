@@ -1,5 +1,7 @@
 package com.java.project01.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.java.project01.service.impl.GHServiceImpl;
@@ -10,13 +12,14 @@ import com.java.project01.vo.Room;
 
 public class GHServiceTest {
 	static Scanner sc = new Scanner(System.in);
-	static Room r1 = new Room("201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1");
-	static Room r2 = new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x");
-	static Room r3 = new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1");
-	static Room r4 = new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x");
-
+	
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
+		service.addRoom(new Room("201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
+		
 		boolean runFlag = true;
 		while (runFlag) {
 			System.out.println(
@@ -137,33 +140,34 @@ public class GHServiceTest {
 				System.out.println("**원하시는 방을 입력해주세요**");
 				
 				int i=1;
-				//수정 필요
-				for(Room room : service.roomsByDate(wantDate)) {
-					System.out.println(i+". "+room);
+				//HashMap으로 수정 필요
+				for(Room room : service.roomsByDate(wantDate).keySet()) {
+					System.out.println(i+". "+room+"("+room.getHeadCount());
 					i++;
 				}
 				
 				Room reserveRoom = null;
 				boolean validRoom = false;
+				List<Room> roomList = service.getAllRooms();
 
 				while (!validRoom) {
 				    int roomChoice = sc.nextInt();
 
 				    switch(roomChoice) {
 				        case 1:
-				            reserveRoom = r1;
+				            reserveRoom = roomList.get(0);
 				            validRoom = true;
 				            break;
 				        case 2:
-				            reserveRoom = r2;
+				            reserveRoom = roomList.get(1);
 				            validRoom = true;
 				            break;
 				        case 3:
-				            reserveRoom = r3;
+				            reserveRoom = roomList.get(2);
 				            validRoom = true;
 				            break;
 				        case 4:
-				            reserveRoom = r4;
+				            reserveRoom = roomList.get(3);
 				            validRoom = true;
 				            break;
 				        default:

@@ -1,5 +1,6 @@
 package com.java.project01.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.java.project01.util.MyDate;
@@ -22,7 +23,7 @@ public interface SearchService {
 	 * @param date 예약날짜
 	 * @return 예약가능한 방 목록
 	 */
-	List<Room> roomsByDate(MyDate date);
+	HashMap<Room, Integer> roomsByDate(MyDate date);
 	
 	/**
 	 * 해당하는 날짜의 인원수가 모두 들어갈 수 있는 예약가능한 방 목록을 반환함
@@ -30,7 +31,7 @@ public interface SearchService {
 	 * @param people 인원수
 	 * @return 예약가능한 방 목록
 	 */
-	List<Room> roomsByDate(MyDate date, int people);
+	HashMap<Room, Integer> roomsByDate(MyDate date, int people);
 	
 	/**
 	 * 해당하는 날짜의 모든 이벤트 목록과 인원수를 반환함

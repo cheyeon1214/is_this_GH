@@ -1,6 +1,8 @@
 package com.java.project01.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.java.project01.service.GHService;
@@ -34,6 +36,10 @@ public class GHServiceImpl implements GHService{
 	}
 	
 	//CRUD
+	public void addRoom(Room room) {
+		rooms.add(room);
+	}
+	
 	@Override
 	public void addReservation(MyDate date, Customer customer, Room room, boolean isBreakfast, int people, int reserveCode) {
 		reservations.add(new Reservation(reserveCode, room, date, customer, isBreakfast, people));
@@ -89,26 +95,107 @@ public class GHServiceImpl implements GHService{
 
 	@Override
 	public Room mostPopularRoom() {
-		// TODO Auto-generated method stub
-		return null;
+		Room pRoom = null;
+		
+		if (reservations.isEmpty()) return null;
+		
+		List<Integer> pList = new ArrayList<>();
+		
+		for (int i = 0; i < rooms.size(); i++) {
+			pList.add(0);
+		}
+		
+		for (Reservation r : reservations) {
+			int idx = rooms.indexOf(r.getRoom());			
+			pList.add(idx, pList.get(idx) + 1); 
+		}
+		
+		int mostIdx = 0;		
+		for (int i = 0; i < pList.size(); i++) {
+			if (pList.get(mostIdx) < pList.get(i)) {
+				mostIdx = i;
+			}
+		}
+		
+		pRoom = rooms.get(mostIdx);
+		
+		return pRoom;
 	}
 
 	@Override
 	public List<MyDate> soldOutDate() {
-		// TODO Auto-generated method stub
-		return null;
+		MyDate date = new MyDate(2025, 5, 1);	
+		
+		List<MyDate> soldOutDateList = new ArrayList<>();
+		
+//		List<Room> leftRooms = roomsByDate(date);
+//		
+//		for (int i = 0; i < now.lengthOfMonth(); i++) {
+//			MyDate date = new MyDate(now.getYear(), now.getMonthValue(), now.getDayOfMonth());
+//			soldOutDateList.add(date)
+//		}
+		
+		return soldOutDateList;
 	}
 
 	@Override
-	public List<Room> roomsByDate(MyDate date) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<Room, Integer> roomsByDate(MyDate date) {
+		HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
+		List<Reservation> dateReserve = new ArrayList<>();
+		
+		for (Room r : rooms) {
+			roomsHeadCount.put(r, 0);
+		}
+		
+		for (Reservation r : reservations) {
+			if (r.getDate().equals(date))  {
+				dateReserve.add(r);
+			}
+		}
+		
+		for (Reservation r : dateReserve) {			
+			roomsHeadCount.put(r.getRoom(), roomsHeadCount.get(r.getRoom()) + r.getPeople());
+		}
+		
+//		List<Room> leftRooms = new ArrayList<>();
+//		
+//		for (Room r : rooms) {
+//			if (roomsHeadCount.get(r) < r.getMaxCount()) {
+//				leftRooms.add(r);
+//			}
+//		}
+		
+		return roomsHeadCount;
 	}
 
 	@Override
-	public List<Room> roomsByDate(MyDate date, int people) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<Room, Integer> roomsByDate(MyDate date, int people) {
+		HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
+		List<Reservation> dateReserve = new ArrayList<>();
+		
+		for (Room r : rooms) {
+			roomsHeadCount.put(r, 0);
+		}
+		
+		for (Reservation r : reservations) {
+			if (r.getDate().equals(date))  {
+				dateReserve.add(r);
+			}
+		}
+		
+		for (Reservation r : dateReserve) {			
+			roomsHeadCount.put(r.getRoom(), roomsHeadCount.get(r.getRoom()) + r.getPeople());
+		}
+		
+//		List<Room> leftRooms = new ArrayList<>();
+//		
+//		for (Room r : rooms) {
+//			if (roomsHeadCount.get(r) < r.getMaxCount() && people <= r.getMaxCount() - roomsHeadCount.get(r)) {
+//				leftRooms.add(r);
+//			}
+//		}
+		
+		return roomsHeadCount;
 	}
 
 	@Override

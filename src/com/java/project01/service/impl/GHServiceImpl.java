@@ -1,7 +1,6 @@
 package com.java.project01.service.impl;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -140,8 +139,12 @@ public class GHServiceImpl implements GHService{
 			dateTreeSet.add(r.getDate());
 		}
 		
-		
-		
+		for (MyDate d : dateTreeSet) {
+			HashMap<Room, Integer> roomsByDate = roomsByDate(d);
+			if (roomsByDate == null) {
+				soldOutDateList.add(d);
+			}
+		}		
 		
 		return soldOutDateList;
 	}

@@ -200,14 +200,6 @@ public class GHServiceImpl implements GHService{
 			roomsHeadCount.put(r.getRoom(), roomsHeadCount.get(r.getRoom()) + r.getPeople());
 		}
 		
-//		List<Room> leftRooms = new ArrayList<>();
-//		
-//		for (Room r : rooms) {
-//			if (roomsHeadCount.get(r) < r.getMaxCount() && people <= r.getMaxCount() - roomsHeadCount.get(r)) {
-//				leftRooms.add(r);
-//			}
-//		}
-		
 		return roomsHeadCount;
 	}
 

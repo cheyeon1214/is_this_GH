@@ -38,7 +38,7 @@ public interface SearchService {
 	 * @param date 날짜
 	 * @return 이벤트 목록
 	 */
-	List<Event> eventsByDate(MyDate date);
+	HashMap<Event, Integer> eventsByDate(MyDate date);
 	
 	/**
 	 * 모든 방을 반환함

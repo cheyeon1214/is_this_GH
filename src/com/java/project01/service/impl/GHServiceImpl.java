@@ -1,9 +1,10 @@
 package com.java.project01.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.java.project01.service.GHService;
 import com.java.project01.util.MyDate;
@@ -36,9 +37,11 @@ public class GHServiceImpl implements GHService{
 	}
 	
 	//CRUD
+	@Override
 	public void addRoom(Room room) {
 		rooms.add(room);
 	}
+	@Override
 	public void addEvent(Event event) {
 		events.add(event);
 	}
@@ -57,6 +60,8 @@ public class GHServiceImpl implements GHService{
 	public List<Event> getAllEvents() {
 		return events;
 	}
+	
+	@Override
 	public List<Reservation> getAllReservations(){
 		return reservations;
 	}
@@ -127,16 +132,16 @@ public class GHServiceImpl implements GHService{
 
 	@Override
 	public List<MyDate> soldOutDate() {
-		MyDate date = new MyDate(2025, 5, 1);	
-		
 		List<MyDate> soldOutDateList = new ArrayList<>();
 		
-//		List<Room> leftRooms = roomsByDate(date);
-//		
-//		for (int i = 0; i < now.lengthOfMonth(); i++) {
-//			MyDate date = new MyDate(now.getYear(), now.getMonthValue(), now.getDayOfMonth());
-//			soldOutDateList.add(date)
-//		}
+		TreeSet<MyDate> dateTreeSet = new TreeSet<>();
+		
+		for (Reservation r : reservations) {
+			dateTreeSet.add(r.getDate());
+		}
+		
+		
+		
 		
 		return soldOutDateList;
 	}
@@ -157,7 +162,9 @@ public class GHServiceImpl implements GHService{
 		}
 		
 		for (Reservation r : dateReserve) {			
-			roomsHeadCount.put(r.getRoom(), roomsHeadCount.get(r.getRoom()) + r.getPeople());
+			Room room = r.getRoom();
+			int current = roomsHeadCount.getOrDefault(room, 0);
+			roomsHeadCount.put(room, current + r.getPeople());
 		}
 		
 //		List<Room> leftRooms = new ArrayList<>();
@@ -202,7 +209,7 @@ public class GHServiceImpl implements GHService{
 	}
 
 	@Override
-	public List<Event> eventsByDate(MyDate date) {
+	public HashMap<Event, Integer> eventsByDate(MyDate date) {
 		HashMap<Event, Integer> eventsHeadCount = new HashMap<>();
 		List<Reservation> dateReserve = new ArrayList<>();
 		
@@ -220,15 +227,15 @@ public class GHServiceImpl implements GHService{
 			eventsHeadCount.put(r.getEvent(), eventsHeadCount.get(r.getEvent()) + r.getPeople());
 		}
 		
-		List<Event> leftEvents = new ArrayList<>();
+//		List<Event> leftEvents = new ArrayList<>();
+//		
+//		for (Event r : events) {
+//			if (eventsHeadCount.get(r) < EVENT_MAX_COUNT) {
+//				leftEvents.add(r);
+//			}
+//		}
 		
-		for (Event r : events) {
-			if (eventsHeadCount.get(r) < EVENT_MAX_COUNT) {
-				leftEvents.add(r);
-			}
-		}
-		
-		return leftEvents;
+		return eventsHeadCount;
 	}
 
 	@Override

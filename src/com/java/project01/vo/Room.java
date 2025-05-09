@@ -1,5 +1,7 @@
 package com.java.project01.vo;
 
+import java.util.Objects;
+
 import com.java.project01.util.MyTime;
 /**
  * 객실과 관련된 클래스
@@ -171,5 +173,17 @@ public class Room {
 				+ maxCount + ", funiture=" + funiture + ", isSoldOut=" + isSoldOut + "]";
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+		Room other = (Room) obj;
+		return Objects.equals(this.name, other.name);
+	}
 	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return Objects.hash(this.name);
+	}
 }

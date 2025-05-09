@@ -19,7 +19,7 @@ public class Room {
 	private String info;
 	private char gender;
 	private int maxCount;
-	private int headCount;
+	//private int headCount;
 	private String funiture;
 	private boolean isSoldOut;
 	
@@ -126,22 +126,6 @@ public class Room {
 	}
 	
 	/**
-	 * 현재 방 인원수를 반환하는 getter
-	 * @return 현재 방 인원수
-	 */
-	public int getHeadCount() {
-		return headCount;
-	}
-	
-	/**
-	 * 현재 방의 인원수를 변경하는 setter
-	 * @param headCount 현재 방 인원수
-	 */
-	public void changeHeadCount(int headCount) {
-		this.headCount = headCount;
-	}
-	
-	/**
 	 * 방 내부의 가구를 반환하는 getter
 	 * @return 가구
 	 */
@@ -184,7 +168,7 @@ public class Room {
 	@Override
 	public String toString() {
 		return "Room [name=" + name + ", price=" + price + ", info=" + info + ", gender=" + gender + ", maxCount="
-				+ maxCount + ", headCount=" + headCount + ", funiture=" + funiture + ", isSoldOut=" + isSoldOut + "]";
+				+ maxCount + ", funiture=" + funiture + ", isSoldOut=" + isSoldOut + "]";
 	}
 	
 	

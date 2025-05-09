@@ -86,5 +86,9 @@ public class MyDate {
 	}
 	
 	
-
+	@Override
+	public boolean equals(Object obj) {
+		MyDate other = (MyDate) obj;
+		return this.year == other.year && this.month == other.month && this.day == other.day;
+	}
 }

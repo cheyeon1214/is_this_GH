@@ -38,7 +38,7 @@ public class Room {
 	public Room(String name, double price,	String info, char gender, int maxCount,	
 			 String funiture) {
 		this.name = name;
-		this.price = price;
+		this.price = price; 
 		this.info = info;
 		this.gender = gender;
 		this.maxCount = maxCount;

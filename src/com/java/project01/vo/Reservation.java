@@ -26,7 +26,7 @@ public class Reservation {
 	 * @param isBreakfast 조식 유무 
 	 * @param people 인원수 
 	 */
-	public Reservation(int reserveCode, Room room, MyDate date, Customer customer, boolean isBreakfast, int people) {
+	public Reservation(int reserveCode, Room room, MyDate date, Customer customer, boolean isBreakfast, int people, Event event) {
 		super();
 		this.reserveCode = reserveCode;
 		this.room = room;
@@ -34,6 +34,7 @@ public class Reservation {
 		this.customer = customer;
 		this.isBreakfast = isBreakfast;
 		this.people = people;
+		this.event = event;
 	}
 
 	/**

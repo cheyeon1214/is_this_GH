@@ -19,7 +19,7 @@ public interface ReserveService {
 	 * @param event 이벤트 객체
 	 * @param reserveCode 예약 코드
 	 */
-	void addReservation(MyDate date,Customer customer, Room room, boolean isBreakfast, int people, int reserveCode);
+	void addReservation(MyDate date,Customer customer, Room room, boolean isBreakfast, int people, int reserveCode, Event event);
 	/**
 	 * 수정 할 예약 코드와 수정 하고싶은 내역이 담긴 예약 객체를 받아 수정한다.
 	 * @param code 수정하고 싶은 예약 코드

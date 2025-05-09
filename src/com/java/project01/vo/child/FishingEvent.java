@@ -1,5 +1,6 @@
 package com.java.project01.vo.child;
 
+import com.java.project01.util.MyTime;
 import com.java.project01.vo.parent.Event;
 
 /**
@@ -16,7 +17,8 @@ public class FishingEvent extends Event{
 	 * @param isBoat 배 사용유무
 	 * @param area 낚시지역
 	 */
-	public FishingEvent(boolean isBoat, String area) {
+	public FishingEvent(String eventType, MyTime startTime, MyTime endTime, boolean isBoat, String area) {
+		super(eventType, startTime, endTime);
 		this.isBoat = isBoat;
 		this.area = area;
 	}

@@ -1,14 +1,21 @@
 package com.java.project01.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.java.project01.service.impl.GHServiceImpl;
 import com.java.project01.util.MyDate;
+import com.java.project01.util.MyTime;
 import com.java.project01.vo.Customer;
 import com.java.project01.vo.Reservation;
 import com.java.project01.vo.Room;
+import com.java.project01.vo.child.BBQEvent;
+import com.java.project01.vo.child.FishingEvent;
+import com.java.project01.vo.child.PartyEvent;
+import com.java.project01.vo.parent.Event;
 
 public class GHServiceTest {
 	static Scanner sc = new Scanner(System.in);
@@ -19,6 +26,11 @@ public class GHServiceTest {
 		service.addRoom(new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
 		service.addRoom(new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
 		service.addRoom(new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
+		
+		service.addEvent(new BBQEvent("BBQ", new MyTime(6, 10, 00), new MyTime(11, 30, 00), "화로", "돼지고기, 소고기"));
+		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
+		service.addEvent(new PartyEvent("Party", new MyTime(6, 30, 00), new MyTime(11, 50, 00), "소주, 맥주"));
+		
 		
 		boolean runFlag = true;
 		while (runFlag) {
@@ -138,17 +150,18 @@ public class GHServiceTest {
 				String phoneString = sc.next();
 				
 				System.out.println("**원하시는 방을 입력해주세요**");
-				
+				List<Room> roomList = service.getAllRooms();
 				int i=1;
 				//HashMap으로 수정 필요
-				for(Room room : service.roomsByDate(wantDate).keySet()) {
-					System.out.println(i+". "+room+"("+room.getHeadCount());
+				HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
+				for(Room room : roomMapByDate.keySet()) {
+					System.out.println(i+". "+room.getName()+"("+roomMapByDate.get(room)+"/"+roomList.get(i-1).getMaxCount()+")");
 					i++;
 				}
 				
 				Room reserveRoom = null;
 				boolean validRoom = false;
-				List<Room> roomList = service.getAllRooms();
+				
 
 				while (!validRoom) {
 				    int roomChoice = sc.nextInt();

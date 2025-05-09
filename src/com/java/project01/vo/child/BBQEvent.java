@@ -1,5 +1,6 @@
 package com.java.project01.vo.child;
 
+import com.java.project01.util.MyTime;
 import com.java.project01.vo.parent.Event;
 /**
  * BBQ 이벤트에 관한 클래스
@@ -16,7 +17,8 @@ public class BBQEvent extends Event {
 	 * @param equipment BBQ용 장비
 	 * @param food 음식
 	 */
-	public BBQEvent(String equipment, String food) {
+	public BBQEvent(String eventType, MyTime startTime, MyTime endTime, String equipment, String food) {
+		super(eventType, startTime, endTime);
 		this.equipment = equipment;
 		this.food = food;
 	}

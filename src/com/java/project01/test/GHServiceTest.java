@@ -33,6 +33,7 @@ public class GHServiceTest {
 		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
 		service.addEvent(new PartyEvent("Party", new MyTime(6, 30, 00), new MyTime(11, 50, 00), "소주, 맥주"));
 		
+		int reserveCode = 0;
 		
 		boolean runFlag = true;
 		while (runFlag) {
@@ -56,13 +57,32 @@ public class GHServiceTest {
 				break;
 			case "3":
 				System.out.println("예약 번호를 입력해주세요");
-				System.out.println(service.checkMyReserve(1000));
 				
+				reserveCode = sc.nextInt();
+				
+				System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));			
 				break;
 			case "4":
-				System.out.println("예약 번호를 입력해주세요");
-				//service.updateReserve(1000, new Reservation(1000, new Room("1029방", 19000, "더블룸이고 화장실이 안에있습니다. 쾌적합니다.", 'f', 4, "침대2, 화장실1"),new MyDate(2025,5,5), new Customer("곽채연", 'f', "010-5582-1857"), true, 2));
-				System.out.println(service.getAllReservations());
+				System.out.println("예약 번호를 입력해주세요");				
+				reserveCode = sc.nextInt();
+				
+				Reservation originRes = service.checkMyReserve(reserveCode);
+				
+				if (originRes == null) {
+					System.out.println("해당하는 예약이 없습니다.");
+					break;
+				}
+				
+				// 예약자의 정보
+				
+				// 조식 여부
+				
+				// 이벤트 여부
+				
+				Reservation res = new Reservation(originRes.getReserveCode(), originRes.getRoom(), null, null, runFlag, reserveCode, null);
+				service.updateReserve(reserveCode, res);
+				
+				System.out.println();
 				break;
 			case "5":
 				service.deleteReserve(1000);
@@ -160,6 +180,7 @@ public class GHServiceTest {
 				
 				for(Room r: roomList) {
 					System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+					i++;
 				}
 				
 				Room reserveRoom = null;
@@ -219,7 +240,8 @@ public class GHServiceTest {
 						HashMap<Event,Integer> eventMapByDate = service.eventsByDate(wantDate);
 						
 						for(Event e: eventList) {
-							System.out.println(i+". "+e.getEventType() + "("+ eventMapByDate.get(e)+"/"+GHServiceImpl.EVENT_MAX_COUNT+")");
+							System.out.println(j+". "+e.getEventType() + "("+ eventMapByDate.get(e)+"/"+GHServiceImpl.EVENT_MAX_COUNT+")");
+							j++;
 						}
 						
 						

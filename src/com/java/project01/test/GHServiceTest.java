@@ -33,8 +33,6 @@ public class GHServiceTest {
 		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
 		service.addEvent(new PartyEvent("Party", new MyTime(6, 30, 00), new MyTime(11, 50, 00), "소주, 맥주"));
 		
-		int reserveCode = 0;
-		
 		boolean runFlag = true;
 		while (runFlag) {
 			System.out.println(
@@ -60,7 +58,7 @@ public class GHServiceTest {
 				break;
 			case "4":
 				System.out.println("예약 번호를 입력해주세요");				
-				reserveCode = sc.nextInt();
+				int reserveCode = sc.nextInt();
 				
 				Reservation originRes = service.checkMyReserve(reserveCode);
 				
@@ -81,8 +79,7 @@ public class GHServiceTest {
 				System.out.println();
 				break;
 			case "5":
-				service.deleteReserve(1000);
-				System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
+				deleteReserveGH();
 				break;
 			case "6":
 				runFlag = false;
@@ -325,6 +322,14 @@ public class GHServiceTest {
 		int reserveCode = sc.nextInt();
 		
 		System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));	
+	}
+	
+	public static void deleteReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약 번호를 입력해주세요");
+		int reserveCode = sc.nextInt();
+		service.deleteReserve(reserveCode);
+		System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
 	}
 	
 }

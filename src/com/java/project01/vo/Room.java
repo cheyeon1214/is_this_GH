@@ -169,8 +169,8 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "Room [name=" + name + ", price=" + price + ", info=" + info + ", gender=" + gender + ", maxCount="
-				+ maxCount + ", funiture=" + funiture + ", isSoldOut=" + isSoldOut + "]";
+		return "방 이름:" + name + ", 방 가격:" + price + ", 방 정보:" + info + ", 전용 성별:" + gender + ", 인원수:"
+				+ maxCount + ", 가구 정보:" + funiture + ", 매진 정보:" + isSoldOut;
 	}
 	
 	@Override

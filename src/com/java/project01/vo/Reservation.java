@@ -142,8 +142,8 @@ public class Reservation {
 	 */
 	@Override
 	public String toString() {
-		return "예약 정보 [예약 코드=" + reserveCode + ", 방 정보=" + room + ", date=" + date + ", 사용자 정보="
-				+ customer + ", 조식 유무=" + isBreakfast + ", 인원수=" + people + ", 이벤트=" + event + "]";
+		return "예약 정보 [예약 코드:" + reserveCode + ", 방 정보:" + room + ", date:" + date + ", 사용자 정보:"
+				+ customer + ", 조식 유무:" + isBreakfast + ", 인원수:" + people + ", 이벤트:" + event + "]";
 	}
 	
 	

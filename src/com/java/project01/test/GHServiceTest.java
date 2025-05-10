@@ -109,8 +109,10 @@ public class GHServiceTest {
 			
 			switch (menuStr) {
 			case "1":
+				printAllRooms();
 				break;
 			case "2":
+				printMostPopular();
 				break;
 			case "3":
 				break;
@@ -125,6 +127,17 @@ public class GHServiceTest {
 				System.out.println("숫자를 잘못 입력하셨습니다. 다시 입력하십시오.");
 			}
 		}
+	}
+	
+	public static void printAllRooms() {
+		//게하의 모든 방을 출력하는 함수
+	}
+	
+	public static void printMostPopular() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("제일 인기있는 방을 소개합니다");
+		System.out.println(service.mostPopularRoom());
+		System.out.println();
 	}
 	
 	public static void reserveGH() {

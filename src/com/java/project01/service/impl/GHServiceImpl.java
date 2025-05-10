@@ -102,6 +102,7 @@ public class GHServiceImpl implements GHService{
 
 	@Override
 	public Room mostPopularRoom() {
+		System.out.println("현재 예약 수: " + reservations.size());
 		Room pRoom = null;
 		
 		if (reservations.isEmpty()) return null;
@@ -114,7 +115,7 @@ public class GHServiceImpl implements GHService{
 		
 		for (Reservation r : reservations) {
 			int idx = rooms.indexOf(r.getRoom());			
-			pList.add(idx, pList.get(idx) + 1); 
+			pList.set(idx, pList.get(idx) + 1); 
 		}
 		
 		int mostIdx = 0;		

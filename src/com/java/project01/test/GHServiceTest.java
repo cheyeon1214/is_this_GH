@@ -24,10 +24,10 @@ public class GHServiceTest {
 	
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		service.addRoom(new Room("201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
-		service.addRoom(new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("여성 방 201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("여성 방 202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("남성 방 301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("남성 방 302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
 		
 		service.addEvent(new BBQEvent("BBQ", new MyTime(6, 10, 00), new MyTime(11, 30, 00), "화로", "돼지고기, 소고기"));
 		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
@@ -140,14 +140,14 @@ public class GHServiceTest {
 		            +"2. 원하는 인원수의 남아있는 방 출력\n"
 		            +"3. 예약하기\n"
 		            +"4. 뒤로가기 \n");
-		    String reserveNum = sc.next(); // ← 이 위치로 이동해야 함
+		    String reserveNum = sc.next();
 
 		    switch(reserveNum) {
 		        case "1":
 		            printReserveByDate(wantDate);
 		            break;
 		        case "2":
-		            // TODO: 원하는 인원수로 방 출력 기능
+		        	printReserveByCount(wantDate);
 		            break;
 		        case "3":
 		            addAReserve(wantDate);
@@ -163,7 +163,7 @@ public class GHServiceTest {
 	
 	private static void printReserveByDate(MyDate wantDate) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		System.out.println(wantDate.getMonth()+"월 "+wantDate.getDay()+"일의 방 예약 현황입니다.");
+		System.out.println(wantDate.getMonth()+"월 "+wantDate.getDay()+"일 기준, 방 예약 현황입니다.");
 		List<Room> roomList = service.getAllRooms();
 		int i=1;
 		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
@@ -172,6 +172,24 @@ public class GHServiceTest {
 			System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
 			i++;
 		}
+	}
+	
+	private static void printReserveByCount(MyDate wantDate) {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약을 원하시는 인원 수를 입력해주세요:");
+		int count = sc.nextInt();
+
+		System.out.println(wantDate.getMonth() + "월 " + wantDate.getDay() + "일 기준, " + count + "인실 예약 가능한 방 목록입니다.");
+		List<Room> roomList = service.getAllRooms();
+		int i=1;
+		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
+		
+		for(Room r: roomList) {
+			if(r.getMaxCount() == count)
+				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+			i++;
+		}
+		
 	}
 
 	public static void addAReserve(MyDate wantDate) {
@@ -217,6 +235,7 @@ public class GHServiceTest {
 			}
 		}
 		
+		//이 때 방 현황보고 뒤로가기 하는 것도 생각해야 함.
 		Room reserveRoom = null;
 		boolean validRoom = false;
 
@@ -271,8 +290,6 @@ public class GHServiceTest {
 					System.out.println(j+". "+e.getEventType() + "("+ eventMapByDate.get(e)+"/"+GHServiceImpl.EVENT_MAX_COUNT+")");
 					j++;
 				}
-				
-				
 				boolean validEvent = false;
 
 				while (!validEvent) {

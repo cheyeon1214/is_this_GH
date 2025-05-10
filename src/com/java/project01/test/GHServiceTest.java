@@ -132,31 +132,48 @@ public class GHServiceTest {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("날짜를 입력해주세요."); //나중에 년,월 받고 매진 안된 날짜 출력되는 형식으로 upgrade
 		MyDate wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
-		System.out.println("원하는 서비스를 선택해주세요");
-		System.out.println("1. 해당 날짜의 남아있는 방 출력\n"
-				+"2. 원하는 인원수의 남아있는 방 출력\n"
-				+"3. 예약하기\n"
-				+"4. 종료 \n");
+		
 		boolean reserveFlag = true;
-		String reserveNum = sc.next();
 		while(reserveFlag) {
-			switch(reserveNum) {
-			case "1": 
-				break;
-			case "2": 
-				break;
-			case "3": 
-				addAReserve(wantDate);
-				reserveFlag =false;
-				break;
-			case "4": 
-				reserveFlag = false;
-				break;
-				default:
-			}
+			System.out.println("원하는 서비스를 선택해주세요");
+		    System.out.println("1. 해당 날짜의 남아있는 방 출력\n"
+		            +"2. 원하는 인원수의 남아있는 방 출력\n"
+		            +"3. 예약하기\n"
+		            +"4. 뒤로가기 \n");
+		    String reserveNum = sc.next(); // ← 이 위치로 이동해야 함
+
+		    switch(reserveNum) {
+		        case "1":
+		            printReserveByDate(wantDate);
+		            break;
+		        case "2":
+		            // TODO: 원하는 인원수로 방 출력 기능
+		            break;
+		        case "3":
+		            addAReserve(wantDate);
+		            break;
+		        case "4":
+		            reserveFlag = false;
+		            break;
+		        default:
+		            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+		    }
 		}
 	}
 	
+	private static void printReserveByDate(MyDate wantDate) {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println(wantDate.getMonth()+"월 "+wantDate.getDay()+"일의 방 예약 현황입니다.");
+		List<Room> roomList = service.getAllRooms();
+		int i=1;
+		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
+		
+		for(Room r: roomList) {
+			System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+			i++;
+		}
+	}
+
 	public static void addAReserve(MyDate wantDate) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("**사용자 정보를 입력해주세요**");
@@ -298,6 +315,18 @@ public class GHServiceTest {
 		    newCode = random.nextInt(9000) + 1000; // 1000 ~ 9999
 		} while (usedCodes.contains(newCode));
 
+		System.out.println("예약 정보를 모두 입력하셨습니다.");
+		System.out.println("정말 예약하시겠습니까? (네/아니요)");
+
+		String confirm = sc.next();
+		if (confirm.equals("아니요")) {
+		    System.out.println("예약이 취소되었습니다. 이전 메뉴로 돌아갑니다.");
+		    return; // 함수 종료
+		} else if (!confirm.equals("네")) {
+		    System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
+		    return;
+		}
+		
 		// 예약 추가
 		service.addReservation(
 		    wantDate,
@@ -309,7 +338,7 @@ public class GHServiceTest {
 		    reserveEvent
 		);
 		
-		System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.");
+		System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.\n");
 		
 		System.out.println(service.getAllReservations());
 		

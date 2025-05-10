@@ -115,6 +115,7 @@ public class GHServiceTest {
 				printMostPopular();
 				break;
 			case "3":
+				printSoldOutDays();
 				break;
 			case "4":
 				break;
@@ -136,8 +137,16 @@ public class GHServiceTest {
 	public static void printMostPopular() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("제일 인기있는 방을 소개합니다");
+		//null 예외처리 추가 !!
 		System.out.println(service.mostPopularRoom());
 		System.out.println();
+	}
+	
+	public static void printSoldOutDays() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약이 마감된 날짜입니다.");
+		//null 예외처리 추가 !!
+		System.out.println(service.soldOutDate());
 	}
 	
 	public static void reserveGH() {

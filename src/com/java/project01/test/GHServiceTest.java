@@ -57,26 +57,7 @@ public class GHServiceTest {
 				checkReserveGH();		
 				break;
 			case "4":
-				System.out.println("예약 번호를 입력해주세요");				
-				int reserveCode = sc.nextInt();
-				
-				Reservation originRes = service.checkMyReserve(reserveCode);
-				
-				if (originRes == null) {
-					System.out.println("해당하는 예약이 없습니다.");
-					break;
-				}
-				
-				// 예약자의 정보
-				
-				// 조식 여부
-				
-				// 이벤트 여부
-				
-				Reservation res = new Reservation(originRes.getReserveCode(), originRes.getRoom(), null, null, runFlag, reserveCode, null);
-				service.updateReserve(reserveCode, res);
-				
-				System.out.println();
+				updateReserveGH();
 				break;
 			case "5":
 				deleteReserveGH();
@@ -118,8 +99,10 @@ public class GHServiceTest {
 				printSoldOutDays();
 				break;
 			case "4":
+				printAllEvents();
 				break;
 			case "5":
+				printBreakfast();
 				break;
 			case "6":
 				runFlag = false;
@@ -147,6 +130,18 @@ public class GHServiceTest {
 		System.out.println("예약이 마감된 날짜입니다.");
 		//null 예외처리 추가 !!
 		System.out.println(service.soldOutDate());
+	}
+	
+	public static void printAllEvents() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("모든 이벤트 목록입니다");
+		for(Event event : service.getAllEvents()) {
+			System.out.println(event);
+		}
+	}
+	public static void printBreakfast() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		//조식 메뉴는 파일입출력으로...
 	}
 	
 	public static void reserveGH() {
@@ -392,10 +387,45 @@ public class GHServiceTest {
 		System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));	
 	}
 	
+	public static void updateReserveGH() {
+//		GHServiceImpl service = GHServiceImpl.getInstance();
+//		System.out.println("예약 번호를 입력해주세요");				
+//		int reserveCode = sc.nextInt();
+//		
+//		Reservation originRes = service.checkMyReserve(reserveCode);
+//		
+//		if (originRes == null) {
+//			System.out.println("해당하는 예약이 없습니다.");
+//			break;
+//		}
+//		
+//		// 예약자의 정보
+//		
+//		// 조식 여부
+//		
+//		// 이벤트 여부
+//		
+//		Reservation res = new Reservation(originRes.getReserveCode(), originRes.getRoom(), null, null, runFlag, reserveCode, null);
+//		service.updateReserve(reserveCode, res);
+//		
+//		System.out.println();
+	}
+	
 	public static void deleteReserveGH() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("예약 번호를 입력해주세요");
 		int reserveCode = sc.nextInt();
+		System.out.println("회원님의 에약 정보입니다.");
+		System.out.println(service.checkMyReserve(reserveCode));
+		System.out.println("정말 예약을 취소하시겠습니까?(네/아니요)");
+		String confirm = sc.next();
+		if (confirm.equals("아니요")) {
+		    System.out.println("이전 메뉴로 돌아갑니다.");
+		    return;
+		} else if (!confirm.equals("네")) {
+		    System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
+		    return;
+		}
 		service.deleteReserve(reserveCode);
 		System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
 	}

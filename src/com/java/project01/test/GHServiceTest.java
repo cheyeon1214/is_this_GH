@@ -56,11 +56,7 @@ public class GHServiceTest {
 				reserveGH();
 				break;
 			case "3":
-				System.out.println("예약 번호를 입력해주세요");
-				
-				reserveCode = sc.nextInt();
-				
-				System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));			
+				checkReserveGH();		
 				break;
 			case "4":
 				System.out.println("예약 번호를 입력해주세요");				
@@ -320,6 +316,15 @@ public class GHServiceTest {
 		
 		System.out.println(service.getAllReservations());
 		
+	}
+	
+	public static void checkReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약 번호를 입력해주세요");
+		
+		int reserveCode = sc.nextInt();
+		
+		System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));	
 	}
 	
 }

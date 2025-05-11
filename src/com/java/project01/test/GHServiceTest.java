@@ -24,16 +24,14 @@ public class GHServiceTest {
 	
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		service.addRoom(new Room("201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
-		service.addRoom(new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("여성 방 201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("여성 방 202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("남성 방 301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("남성 방 302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
 		
 		service.addEvent(new BBQEvent("BBQ", new MyTime(6, 10, 00), new MyTime(11, 30, 00), "화로", "돼지고기, 소고기"));
 		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
 		service.addEvent(new PartyEvent("Party", new MyTime(6, 30, 00), new MyTime(11, 50, 00), "소주, 맥주"));
-		
-		int reserveCode = 0;
 		
 		boolean runFlag = true;
 		while (runFlag) {
@@ -56,37 +54,13 @@ public class GHServiceTest {
 				reserveGH();
 				break;
 			case "3":
-				System.out.println("예약 번호를 입력해주세요");
-				
-				reserveCode = sc.nextInt();
-				
-				System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));			
+				checkReserveGH();		
 				break;
 			case "4":
-				System.out.println("예약 번호를 입력해주세요");				
-				reserveCode = sc.nextInt();
-				
-				Reservation originRes = service.checkMyReserve(reserveCode);
-				
-				if (originRes == null) {
-					System.out.println("해당하는 예약이 없습니다.");
-					break;
-				}
-				
-				// 예약자의 정보
-				
-				// 조식 여부
-				
-				// 이벤트 여부
-				
-				Reservation res = new Reservation(originRes.getReserveCode(), originRes.getRoom(), null, null, runFlag, reserveCode, null);
-				service.updateReserve(reserveCode, res);
-				
-				System.out.println();
+				updateReserveGH();
 				break;
 			case "5":
-				service.deleteReserve(1000);
-				System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
+				deleteReserveGH();
 				break;
 			case "6":
 				runFlag = false;
@@ -116,14 +90,19 @@ public class GHServiceTest {
 			
 			switch (menuStr) {
 			case "1":
+				printAllRooms();
 				break;
 			case "2":
+				printMostPopular();
 				break;
 			case "3":
+				printSoldOutDays();
 				break;
 			case "4":
+				printAllEvents();
 				break;
 			case "5":
+				printBreakfast();
 				break;
 			case "6":
 				runFlag = false;
@@ -134,36 +113,102 @@ public class GHServiceTest {
 		}
 	}
 	
+	public static void printAllRooms() {
+		//게하의 모든 방을 출력하는 함수
+	}
+	
+	public static void printMostPopular() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("제일 인기있는 방을 소개합니다");
+		//null 예외처리 추가 !!
+		System.out.println(service.mostPopularRoom());
+		System.out.println();
+	}
+	
+	public static void printSoldOutDays() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약이 마감된 날짜입니다.");
+		//null 예외처리 추가 !!
+		System.out.println(service.soldOutDate());
+	}
+	
+	public static void printAllEvents() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("모든 이벤트 목록입니다");
+		for(Event event : service.getAllEvents()) {
+			System.out.println(event);
+		}
+	}
+	public static void printBreakfast() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		//조식 메뉴는 파일입출력으로...
+	}
+	
 	public static void reserveGH() {
 		//예약을 하는 곳
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("날짜를 입력해주세요."); //나중에 년,월 받고 매진 안된 날짜 출력되는 형식으로 upgrade
 		MyDate wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
-		System.out.println("원하는 서비스를 선택해주세요");
-		System.out.println("1. 해당 날짜의 남아있는 방 출력\n"
-				+"2. 원하는 인원수의 남아있는 방 출력\n"
-				+"3. 예약하기\n"
-				+"4. 종료 \n");
+		
 		boolean reserveFlag = true;
-		String reserveNum = sc.next();
 		while(reserveFlag) {
-			switch(reserveNum) {
-			case "1": 
-				break;
-			case "2": 
-				break;
-			case "3": 
-				addAReserve(wantDate);
-				reserveFlag =false;
-				break;
-			case "4": 
-				reserveFlag = false;
-				break;
-				default:
-			}
+			System.out.println("원하는 서비스를 선택해주세요");
+		    System.out.println("1. 해당 날짜의 남아있는 방 출력\n"
+		            +"2. 원하는 인원수의 남아있는 방 출력\n"
+		            +"3. 예약하기\n"
+		            +"4. 뒤로가기 \n");
+		    String reserveNum = sc.next();
+
+		    switch(reserveNum) {
+		        case "1":
+		            printReserveByDate(wantDate);
+		            break;
+		        case "2":
+		        	printReserveByCount(wantDate);
+		            break;
+		        case "3":
+		            addAReserve(wantDate);
+		            break;
+		        case "4":
+		            reserveFlag = false;
+		            break;
+		        default:
+		            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+		    }
 		}
 	}
 	
+	private static void printReserveByDate(MyDate wantDate) {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println(wantDate.getMonth()+"월 "+wantDate.getDay()+"일 기준, 방 예약 현황입니다.");
+		List<Room> roomList = service.getAllRooms();
+		int i=1;
+		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
+		
+		for(Room r: roomList) {
+			System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+			i++;
+		}
+	}
+	
+	private static void printReserveByCount(MyDate wantDate) {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약을 원하시는 인원 수를 입력해주세요:");
+		int count = sc.nextInt();
+
+		System.out.println(wantDate.getMonth() + "월 " + wantDate.getDay() + "일 기준, " + count + "인실 예약 가능한 방 목록입니다.");
+		List<Room> roomList = service.getAllRooms();
+		int i=1;
+		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
+		
+		for(Room r: roomList) {
+			if(r.getMaxCount() == count)
+				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+			i++;
+		}
+		
+	}
+
 	public static void addAReserve(MyDate wantDate) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("**사용자 정보를 입력해주세요**");
@@ -207,6 +252,7 @@ public class GHServiceTest {
 			}
 		}
 		
+		//이 때 방 현황보고 뒤로가기 하는 것도 생각해야 함.
 		Room reserveRoom = null;
 		boolean validRoom = false;
 
@@ -261,8 +307,6 @@ public class GHServiceTest {
 					System.out.println(j+". "+e.getEventType() + "("+ eventMapByDate.get(e)+"/"+GHServiceImpl.EVENT_MAX_COUNT+")");
 					j++;
 				}
-				
-				
 				boolean validEvent = false;
 
 				while (!validEvent) {
@@ -305,6 +349,18 @@ public class GHServiceTest {
 		    newCode = random.nextInt(9000) + 1000; // 1000 ~ 9999
 		} while (usedCodes.contains(newCode));
 
+		System.out.println("예약 정보를 모두 입력하셨습니다.");
+		System.out.println("정말 예약하시겠습니까? (네/아니요)");
+
+		String confirm = sc.next();
+		if (confirm.equals("아니요")) {
+		    System.out.println("예약이 취소되었습니다. 이전 메뉴로 돌아갑니다.");
+		    return; // 함수 종료
+		} else if (!confirm.equals("네")) {
+		    System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
+		    return;
+		}
+		
 		// 예약 추가
 		service.addReservation(
 		    wantDate,
@@ -316,10 +372,62 @@ public class GHServiceTest {
 		    reserveEvent
 		);
 		
-		System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.");
+		System.out.println("예약 되었습니다. 예약 번호는"+newCode+"입니다.\n");
 		
 		System.out.println(service.getAllReservations());
 		
+	}
+	
+	public static void checkReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약 번호를 입력해주세요");
+		
+		int reserveCode = sc.nextInt();
+		
+		System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));	
+	}
+	
+	public static void updateReserveGH() {
+//		GHServiceImpl service = GHServiceImpl.getInstance();
+//		System.out.println("예약 번호를 입력해주세요");				
+//		int reserveCode = sc.nextInt();
+//		
+//		Reservation originRes = service.checkMyReserve(reserveCode);
+//		
+//		if (originRes == null) {
+//			System.out.println("해당하는 예약이 없습니다.");
+//			break;
+//		}
+//		
+//		// 예약자의 정보
+//		
+//		// 조식 여부
+//		
+//		// 이벤트 여부
+//		
+//		Reservation res = new Reservation(originRes.getReserveCode(), originRes.getRoom(), null, null, runFlag, reserveCode, null);
+//		service.updateReserve(reserveCode, res);
+//		
+//		System.out.println();
+	}
+	
+	public static void deleteReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약 번호를 입력해주세요");
+		int reserveCode = sc.nextInt();
+		System.out.println("회원님의 에약 정보입니다.");
+		System.out.println(service.checkMyReserve(reserveCode));
+		System.out.println("정말 예약을 취소하시겠습니까?(네/아니요)");
+		String confirm = sc.next();
+		if (confirm.equals("아니요")) {
+		    System.out.println("이전 메뉴로 돌아갑니다.");
+		    return;
+		} else if (!confirm.equals("네")) {
+		    System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
+		    return;
+		}
+		service.deleteReserve(reserveCode);
+		System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
 	}
 	
 }

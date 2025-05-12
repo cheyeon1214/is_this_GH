@@ -23,7 +23,7 @@ public class Room {
 	private int maxCount;
 	//private int headCount;
 	private String funiture;
-	private boolean isSoldOut;
+	//private boolean isSoldOut;
 	
 	public Room() {}
 	
@@ -143,22 +143,6 @@ public class Room {
 		this.funiture = funiture;
 	}
 	
-	/**
-	 * 방이 꽉 차서 예약불가능한지를 반환하는 getter
-	 * @return
-	 */
-	public boolean isSoldOut() {
-		return isSoldOut;
-	}
-	
-	/**
-	 * 방이 예약가능/불가능여부를 반환하는 setter
-	 * @param isSoldOut
-	 */
-	public void changeSoldOut(boolean isSoldOut) {
-		this.isSoldOut = isSoldOut;
-	}
-	
 	public static MyTime getCheckin() {
 		return checkIn;
 	}
@@ -170,7 +154,7 @@ public class Room {
 	@Override
 	public String toString() {
 		return "방 이름:" + name + ", 방 가격:" + price + ", 방 정보:" + info + ", 전용 성별:" + gender + ", 인원수:"
-				+ maxCount + ", 가구 정보:" + funiture + ", 매진 정보:" + isSoldOut;
+				+ maxCount + ", 가구 정보:" + funiture;
 	}
 	
 	@Override

@@ -264,8 +264,19 @@ public class GHServiceImpl implements GHService{
 	}
 
 	@Override
-	public String getBreakfastInfo() {
-		String breakfastInfo = "";
+	public String getBreakfastInfo() throws IOException {
+		String breakfastInfo = "";		
+		BufferedReader br = new BufferedReader(new FileReader("./breakfast.txt"));
+		
+        while(true) {
+        	String tmpStr = br.readLine();   
+        	if (tmpStr == null)
+        		break;
+        	//System.out.println(breakfastInfo);
+        	breakfastInfo += tmpStr;
+        }       
+        
+        br.close();
 		
 		return breakfastInfo;
 	}

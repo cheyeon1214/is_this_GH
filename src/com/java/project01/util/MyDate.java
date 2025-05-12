@@ -1,5 +1,7 @@
 package com.java.project01.util;
 
+import java.time.LocalDate;
+
 /**
  *  MyDate Class
  *  - 날짜를 관리하는 클래스입니다.
@@ -78,6 +80,33 @@ public class MyDate {
 	 */
 	public int getMyDate() {
 		return year + month + day;
+	}
+	
+	public boolean isCorrectDate() {
+		if (this.year <= 0)
+			return false;
+		
+		if (this.month < 1 || this.month > 12)
+			return false;
+		
+		switch (this.month) {
+		case 2:
+			if (this.day < 1 || this.day > 29)
+				return false;
+			break;
+		case 4:
+		case 9:
+		case 11:
+			if (this.day < 1 || this.day > 30)
+				return false;
+			break;
+		default:
+			if (this.day < 1 || this.day > 31)
+				return false;
+			break;
+		}
+		
+		return true;
 	}
 	
 	@Override

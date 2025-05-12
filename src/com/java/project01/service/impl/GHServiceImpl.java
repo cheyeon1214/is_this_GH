@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import com.java.project01.exception.RecordNotFoundException;
@@ -153,18 +154,26 @@ public class GHServiceImpl implements GHService{
 	@Override
 	public List<MyDate> soldOutDate() {
 		List<MyDate> soldOutDateList = new ArrayList<>();
-		
 		TreeSet<MyDate> dateTreeSet = new TreeSet<>();
+		boolean isFullyBooked;
 		
 		for (Reservation r : reservations) {
 			dateTreeSet.add(r.getDate());
 		}
 		
 		for (MyDate d : dateTreeSet) {
-			HashMap<Room, Integer> roomsByDate = roomsByDate(d);
-			if (roomsByDate == null) {
-				soldOutDateList.add(d);
+			HashMap<Room, Integer> roomsByDateMap = roomsByDate(d);
+			Set<Room> rooms = roomsByDateMap.keySet();
+			isFullyBooked = true;
+			
+			for (Room r : rooms) {
+				if (roomsByDateMap.get(r) != r.getMaxCount()) {
+					isFullyBooked = false;
+					break;
+				}
 			}
+			
+			if (isFullyBooked) soldOutDateList.add(d);
 		}		
 		
 		return soldOutDateList;

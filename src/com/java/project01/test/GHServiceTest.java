@@ -1,7 +1,5 @@
 package com.java.project01.test;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +23,6 @@ import com.java.project01.vo.parent.Event;
 
 public class GHServiceTest {
 	static Scanner sc = new Scanner(System.in);
-	static PrintWriter pw;
 	
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
@@ -191,18 +188,6 @@ public class GHServiceTest {
 			}
 		}
 		
-		try {
-			pw = new PrintWriter(new FileWriter("C:/Users/lmh/Documents/test.txt", true));
-			
-	        for(Reservation r : service.getAllReservations()) {
-	            pw.println(r);
-	        }
-	        
-	        pw.close();
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		
 		sc.close();
 	}
 
@@ -240,7 +225,7 @@ public class GHServiceTest {
 				runFlag = false;
 				return;
 			default:
-				System.out.println("숫자를 잘못 입력하셨습니다. 다시 입력하십시오.");
+				System.out.println("잘못된 숫자를 입력하셨습니다. 다시 입력하십시오.");
 			}
 		}
 	}
@@ -252,14 +237,19 @@ public class GHServiceTest {
 	public static void printMostPopular() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("제일 인기있는 방을 소개합니다");
+		
 		//null 예외처리 추가 !!
-		System.out.println(service.mostPopularRoom());
-		System.out.println();
+		try {
+			System.out.println(service.mostPopularRoom());
+		} catch (NullPointerException e) {
+			System.out.println("인기있는 방을 찾을 수 없습니다. :: " + e.getMessage());
+		}
 	}
 	
 	public static void printSoldOutDays() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("예약이 마감된 날짜입니다.");
+		
 		//null 예외처리 추가 !!
 		System.out.println(service.soldOutDate());
 	}
@@ -274,7 +264,6 @@ public class GHServiceTest {
 	public static void printBreakfast() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		//조식 메뉴는 파일입출력으로...
-		System.out.println(service.getBreakfastInfo());
 	}
 	
 	public static void reserveGH() {
@@ -364,8 +353,6 @@ public class GHServiceTest {
 		System.out.println("예약자분 성별(여/남): ");
 		String input = "";
 		char gender;
-		
-		
 
 		while(true) {
 			input = sc.next();
@@ -543,10 +530,12 @@ public class GHServiceTest {
 		int reserveCode = sc.nextInt();
 		
 		try {
-			System.out.println(service.checkMyReserve(reserveCode));
+			Reservation r = service.checkMyReserve(reserveCode);
+			System.out.println("예약 정보 : " + r);
 		} catch (RecordNotFoundException e) {
 			System.out.println(e.getMessage());
-		}	
+		}
+		//System.out.println(service.checkMyReserve(reserveCode) == null ? "해당 예약이 없습니다." : service.checkMyReserve(reserveCode));	
 	}
 	
 	public static void updateReserveGH() {
@@ -574,27 +563,34 @@ public class GHServiceTest {
 	}
 	
 	public static void deleteReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();
+		System.out.println("예약 번호를 입력해주세요");
+		int reserveCode = sc.nextInt();
+		
 		try {
-
-			GHServiceImpl service = GHServiceImpl.getInstance();
-			System.out.println("예약 번호를 입력해주세요");
-			int reserveCode = sc.nextInt();
+			// 예약 정보 출력
 			System.out.println("회원님의 에약 정보입니다.");
 			System.out.println(service.checkMyReserve(reserveCode));
+
+			// 예약 취소 여부
 			System.out.println("정말 예약을 취소하시겠습니까?(네/아니요)");
 			String confirm = sc.next();
+			
 			if (confirm.equals("아니요")) {
-			    System.out.println("이전 메뉴로 돌아갑니다.");
-			    return;
+				System.out.println("이전 메뉴로 돌아갑니다.");
+				return;
 			} else if (!confirm.equals("네")) {
-			    System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
-			    return;
+				System.out.println("잘못된 입력입니다. 예약을 취소합니다.");
+				return;
 			}
+			
+			// 예약 삭제
 			service.deleteReserve(reserveCode);
-			System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
+			System.out.println("( " + reserveCode + " )의 예약을 삭제하였습니다." );
 		} catch (RecordNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
+		//System.out.println(service.getAllReservations() == null ? "null" : service.getAllReservations());
 	}
 	
 }

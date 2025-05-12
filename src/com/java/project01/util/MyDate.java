@@ -2,11 +2,13 @@ package com.java.project01.util;
 
 import java.time.LocalDate;
 
+import com.java.project01.exception.InvalidInputDataException;
+
 /**
  *  MyDate Class
  *  - 날짜를 관리하는 클래스입니다.
  */
-public class MyDate implements Comparable<MyDate> {
+public class MyDate implements Comparable<MyDate>{
 	
 	private int year;
 	private int month;

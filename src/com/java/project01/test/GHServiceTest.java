@@ -1,6 +1,7 @@
 package com.java.project01.test;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.java.project01.exception.InvalidInputDataException;
 import com.java.project01.exception.RecordNotFoundException;
 import com.java.project01.service.impl.GHServiceImpl;
 import com.java.project01.util.MyDate;
@@ -25,7 +27,6 @@ import com.java.project01.vo.parent.Event;
 
 public class GHServiceTest {
 	static Scanner sc = new Scanner(System.in);
-	static PrintWriter pw;
 
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
@@ -40,7 +41,7 @@ public class GHServiceTest {
 
 		// 5월 13일 - 여성 2, 남성 1
 		service.addReservation(new MyDate(2025, 5, 13), new Customer("김민지", 'f', "010-1234-5678"),
-				service.getAllRooms().get(0), true, 4, 1234, service.getAllEvents().get(0));
+				service.getAllRooms().get(0), true, 4, 1234, null);
 		service.addReservation(new MyDate(2025, 5, 13), new Customer("정예린", 'f', "010-5678-9012"),
 				service.getAllRooms().get(1), false, 8, 2345, service.getAllEvents().get(1));
 		service.addReservation(new MyDate(2025, 5, 13), new Customer("이준호", 'm', "010-2345-6789"),
@@ -48,11 +49,13 @@ public class GHServiceTest {
 
 		// 5월 14일 - 여성 2, 남성 1
 		service.addReservation(new MyDate(2025, 5, 14), new Customer("박서연", 'f', "010-3456-7890"),
-				service.getAllRooms().get(0), true, 3, 4567, service.getAllEvents().get(0));
+				service.getAllRooms().get(0), true, 4, 4567, service.getAllEvents().get(0));
 		service.addReservation(new MyDate(2025, 5, 14), new Customer("윤서아", 'f', "010-7890-1234"),
-				service.getAllRooms().get(1), false, 1, 5678, service.getAllEvents().get(1));
+				service.getAllRooms().get(1), false, 8, 5678, service.getAllEvents().get(1));
 		service.addReservation(new MyDate(2025, 5, 14), new Customer("최현우", 'm', "010-4567-8901"),
-				service.getAllRooms().get(3), true, 2, 6789, service.getAllEvents().get(2));
+				service.getAllRooms().get(2), true, 4, 6789, service.getAllEvents().get(2));
+		service.addReservation(new MyDate(2025, 5, 14), new Customer("최진우", 'm', "010-7767-8901"),
+				service.getAllRooms().get(3), true, 8, 6899, service.getAllEvents().get(1));
 		// 5월 15일 - 여성 2, 남성 1
 		service.addReservation(new MyDate(2025, 5, 15), new Customer("배지은", 'f', "010-9012-3456"),
 				service.getAllRooms().get(0), true, 2, 7890, service.getAllEvents().get(0));
@@ -111,18 +114,8 @@ public class GHServiceTest {
 				System.out.println("숫자를 잘못 입력하셨습니다. 다시 입력하십시오.");
 			}
 		}
-
-		try {
-			pw = new PrintWriter(new FileWriter("./reservations.txt"));
-
-			for (Reservation r : service.getAllReservations()) {
-				pw.println(r);
-			}
-
-			pw.close();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+		
+		service.printReservation();
 
 		sc.close();
 	}
@@ -200,13 +193,25 @@ public class GHServiceTest {
 	public static void printBreakfast() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		// 조식 메뉴는 파일입출력으로...
+		try {
+			System.out.println(service.getBreakfastInfo());
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	public static void reserveGH() {
 		// 예약을 하는 곳
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("날짜를 입력해주세요."); // 나중에 년,월 받고 매진 안된 날짜 출력되는 형식으로 upgrade
-		MyDate wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
+		MyDate wantDate = null;
+		try {
+			wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
+		} catch (Exception e) {
+			System.out.println("날짜는 숫자만 입력해야 합니다.");
+			sc.nextLine();
+			return;
+		}
 		LocalDate nowDate = LocalDate.now();
 
 		// 예약 날짜가 오늘보다 앞인 경우
@@ -469,7 +474,8 @@ public class GHServiceTest {
 		try {
 			originRes = service.checkMyReserve(reserveCode);
 		} catch (RecordNotFoundException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
+			return;
 		}
 		Customer tempCustomer = originRes.getCustomer();
 		boolean tempIsBreakfast = originRes.getIsBreakfast();
@@ -500,9 +506,9 @@ public class GHServiceTest {
 		}
 		try {
 			service.updateReserve(reserveCode, new Reservation(reserveCode, originRes.getRoom(), originRes.getDate(),
-					tempCustomer, tempIsBreakfast, reserveCode, tempEvent));
+					tempCustomer, tempIsBreakfast, originRes.getPeople(), tempEvent));
 		} catch (RecordNotFoundException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -549,7 +555,11 @@ public class GHServiceTest {
 		
 		while (true) {
 			System.out.println("회원님의 이벤트 정보입니다.");
-			System.out.println("현재 이벤트 : " + currentEvent.getEventType());
+			try {
+				System.out.println("현재 이벤트 : " + currentEvent.getEventType());
+			} catch (Exception e) {
+				System.out.println("예약한 이벤트가 없습니다.");
+			}
 			System.out.println("바꾸시겠습니까?(네/아니요)");
 			
 			String answer2 = sc.next();
@@ -622,8 +632,6 @@ public class GHServiceTest {
 		} catch (RecordNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-		// System.out.println(service.getAllReservations() == null ? "null" :
-		// service.getAllReservations());
 	}
 
 }

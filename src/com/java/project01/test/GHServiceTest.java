@@ -252,12 +252,19 @@ public class GHServiceTest {
 			}
 		}
 		
+		System.out.println("예약을 원하지 않으시면 -1을 입력하십시오.");
+		
 		//이 때 방 현황보고 뒤로가기 하는 것도 생각해야 함.
 		Room reserveRoom = null;
 		boolean validRoom = false;
 
 		while (!validRoom) {
 		    int roomChoice = sc.nextInt();
+		    
+		    if (roomChoice == -1) {
+		    	System.out.println("예약 선택을 취소합니다.");
+		    	return;
+		    }
 
 		    if (roomChoice < 1 || roomChoice > roomList.size()) {
 		        System.out.println("입력하신 번호의 방은 존재하지 않습니다. 다시 입력해주세요.");

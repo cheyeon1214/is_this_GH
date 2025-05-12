@@ -6,7 +6,7 @@ import java.time.LocalDate;
  *  MyDate Class
  *  - 날짜를 관리하는 클래스입니다.
  */
-public class MyDate {
+public class MyDate implements Comparable<MyDate> {
 	
 	private int year;
 	private int month;
@@ -119,5 +119,15 @@ public class MyDate {
 	public boolean equals(Object obj) {
 		MyDate other = (MyDate) obj;
 		return this.year == other.year && this.month == other.month && this.day == other.day;
+	}
+	
+	@Override
+	public int compareTo(MyDate o) {
+		if (this.year != o.year) 
+			return this.year - o.year;
+		else if (this.month != o.month) 
+			return this.month - o.month;
+		else 
+			return this.day - o.day;
 	}
 }

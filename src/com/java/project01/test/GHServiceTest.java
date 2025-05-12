@@ -48,9 +48,7 @@ public class GHServiceTest {
 	    service.addReservation(new MyDate(2025, 5, 13),
 	        new Customer("이준호", 'm', "010-2345-6789"),
 	        service.getAllRooms().get(2), true, 4, 3456, service.getAllEvents().get(2));
-	    service.addReservation(new MyDate(2025, 5, 13),
-		        new Customer("이춘호", 'm', "010-1225-4559"),
-		        service.getAllRooms().get(3), true, 8, 1323, service.getAllEvents().get(0));
+	    
 	    // 5월 14일 - 여성 2, 남성 1
 	    service.addReservation(new MyDate(2025, 5, 14),
 	        new Customer("박서연", 'f', "010-3456-7890"),

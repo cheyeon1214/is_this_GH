@@ -240,7 +240,7 @@ public class GHServiceTest {
 		System.out.println("**원하시는 방을 입력해주세요**");
 		
 		System.out.println(input+"성 전용 방 리스트입니다.");
-		List<Room> roomList = service.getAllRooms();
+		List<Room> roomList = service.getAllRooms().stream().filter(m -> (m.getGender() == gender)).toList();
 		
 		int i=1;
 		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);

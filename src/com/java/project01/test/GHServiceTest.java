@@ -1,5 +1,7 @@
 package com.java.project01.test;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import com.java.project01.vo.parent.Event;
 
 public class GHServiceTest {
 	static Scanner sc = new Scanner(System.in);
+	static PrintWriter pw;
 	
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
@@ -186,6 +189,18 @@ public class GHServiceTest {
 			default:
 				System.out.println("숫자를 잘못 입력하셨습니다. 다시 입력하십시오.");
 			}
+		}
+		
+		try {
+			pw = new PrintWriter(new FileWriter("./reservations.txt"));
+			
+	        for(Reservation r : service.getAllReservations()) {
+	            pw.println(r);
+	        }
+	        
+	        pw.close();
+		} catch(Exception e) {
+			System.out.println(e);
 		}
 		
 		sc.close();

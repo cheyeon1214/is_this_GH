@@ -483,84 +483,13 @@ public class GHServiceTest {
 
 			switch (numString) {
 			case "1":
-				System.out.println("예약자 정보를 다시 입력받습니다.");
-				System.out.println("이름을 입력해 주세요: ");
-				String tempName = sc.next();
-				System.out.println("전화번호를 입력해 주세요: ");
-				String phoneString = sc.next();
-				tempCustomer = new Customer(tempName, tempCustomer.getGender(), phoneString);
-//				try {
-//					service.updateReserve(reserveCode, new Reservation(reserveCode, originRes.getRoom(), originRes.getDate(), tempCustomer, tempIsBreakfast, reserveCode, tempEvent));
-//				} catch (RecordNotFoundException e) {
-//					e.getMessage();
-//				}
+				tempCustomer = updateCustomer(tempCustomer);
 				break;
 			case "2":
-				while (true) {
-					System.out.println("회원님의 조식 현황입니다.");
-					if (originRes.getIsBreakfast() == false) {
-						System.out.println("조식: 미신청");
-					} else {
-						System.out.println("조식: 신청");
-					}
-					System.out.println("변경하시겠습니까?(네/아니요) ");
-					String answer = sc.next();
-					if (answer.equals("네")) {
-						tempIsBreakfast = !tempIsBreakfast;
-						break;
-					} else if (answer.equals("아니요")) {
-						break;
-					} else {
-						System.out.println("잘못된 값을 입력하셨습니다. 다시 입력해주세요.");
-					}
-				}
+				tempIsBreakfast = isBreakfastOption(tempIsBreakfast);
 				break;
 			case "3":
-				while (true) {
-					System.out.println("회원님의 이벤트 정보입니다.");
-					System.out.println(tempEvent);
-					System.out.println("바꾸시겠습니까?(네/아니요)");
-					String answer2 = sc.next();
-					if (answer2.equals("네")) {
-						System.out.println("원하시는 이벤트 번호를 입력해주세요.");
-						List<Event> eventList = service.getAllEvents();
-						int j = 1;
-						HashMap<Event, Integer> eventMapByDate = service.eventsByDate(originRes.getDate());
-
-						for (Event e : eventList) {
-							System.out.println(j + ". " + e.getEventType() + "(" + eventMapByDate.get(e) + "/"
-									+ GHServiceImpl.EVENT_MAX_COUNT + ")");
-							j++;
-						}
-						boolean validEvent = false;
-
-						while (!validEvent) {
-							int eventChoice = sc.nextInt();
-
-							if (eventChoice < 1 || eventChoice > eventList.size()) {
-								System.out.println("입력하신 번호의 이벤트는 존재하지 않습니다. 다시 입력해주세요.");
-								continue;
-							}
-
-							Event selectedEvent = eventList.get(eventChoice - 1);
-							int current_Count = eventMapByDate.getOrDefault(selectedEvent, 0);
-
-							if (current_Count + originRes.getPeople() > GHServiceImpl.EVENT_MAX_COUNT) {
-								System.out.println("인원수가 가득 찼습니다. 다시 입력해주세요.");
-							} else {
-								tempEvent = selectedEvent;
-								validEvent = true;
-							}
-						}
-
-						System.out.println(tempEvent.getEventType() + "이벤트 예약 정보가 저장되었습니다.");
-						break;
-					} else if (answer2.equals("아니요")) {
-						break;
-					} else {
-						System.out.println("잘못된 값을 입력하셨습니다. 다시 입력해주세요.");
-					}
-				}
+				tempEvent = updateEvent(originRes);
 				break;
 			case "4":
 				runUpdateFlag = false;
@@ -577,8 +506,96 @@ public class GHServiceTest {
 		}
 	}
 
-	public static void deleteReserveGH() {
+	// Update 로직 함수
+	// 사용자 정보 수정
+	private static Customer updateCustomer(Customer changeCustomer) {
+		System.out.println("예약자 정보를 다시 입력받습니다.");
+		System.out.println("이름을 입력해 주세요: ");
+		String tempName = sc.next();
+		System.out.println("전화번호를 입력해 주세요: ");
+		String phoneString = sc.next();
+		return new Customer(tempName, changeCustomer.getGender(), phoneString);
+	}
+
+	// 시용자 조식 여부 수정
+	private static boolean isBreakfastOption(boolean currentIsBreakfast) {
+		while (true) {
+			System.out.println("회원님의 조식 현황입니다.");
+			System.out.println("조식 : " + (currentIsBreakfast ? "신청" : "미신청"));
+
+			System.out.println("변경하시겠습니까?(네/아니요) ");
+			String answer = sc.next();
+
+			if (answer.equals("네")) {
+				return !currentIsBreakfast;
+			} else if (answer.equals("아니요")) {
+				return currentIsBreakfast;
+			} else {
+				System.out.println("잘못된 값을 입력하셨습니다. 다시 입력해주세요.");
+			}
+		}
+	}
+
+	// 사용자 이벤트 참여 여부 수정
+	private static Event updateEvent(Reservation originRes) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
+		
+		// 고객이 기존 선택한 이벤트
+		Event currentEvent = originRes.getEvent();
+		// 고객이 선택한 이벤트 날짜
+		MyDate date = originRes.getDate();
+		// 이벤트 참여 인원
+		int people = originRes.getPeople();
+		
+		while (true) {
+			System.out.println("회원님의 이벤트 정보입니다.");
+			System.out.println("현재 이벤트 : " + currentEvent.getEventType());
+			System.out.println("바꾸시겠습니까?(네/아니요)");
+			
+			String answer2 = sc.next();
+			
+			if (answer2.equals("네")) {
+				System.out.println("원하시는 이벤트 번호를 입력해주세요.");
+				List<Event> eventList = service.getAllEvents();
+				int j = 1;
+				HashMap<Event, Integer> eventMapByDate = service.eventsByDate(date);
+
+				for (Event e : eventList) {
+					System.out.println(j + ". " + e.getEventType() + "(" + eventMapByDate.get(e) + "/"
+							+ GHServiceImpl.EVENT_MAX_COUNT + ")");
+					j++;
+				}
+				
+				boolean validEvent = false;
+				while (!validEvent) {
+					int eventChoice = sc.nextInt();
+
+					if (eventChoice < 1 || eventChoice > eventList.size()) {
+						System.out.println("입력하신 번호의 이벤트는 존재하지 않습니다. 다시 입력해주세요.");
+						continue;
+					}
+
+					Event selectedEvent = eventList.get(eventChoice - 1);
+					int current_Count = eventMapByDate.getOrDefault(selectedEvent, 0);
+
+					if (current_Count + people > GHServiceImpl.EVENT_MAX_COUNT) {
+						System.out.println("이벤트 인원이 가득 찼습니다. 다시 선택해주세요.");
+					} else {
+						System.out.println(selectedEvent.getEventType() + " 이벤트로 예약이 변경되었습니다.");
+						return selectedEvent;
+					}
+				}
+			} else if (answer2.equals("아니요")) {
+				// 기존 고객이 선택한 Event 
+				return currentEvent;
+			} else {
+				System.out.println("잘못된 값을 입력하셨습니다. 다시 입력해주세요.");
+			}
+		}
+	}
+
+	public static void deleteReserveGH() {
+		GHServiceImpl service = GHServiceImpl.getInstance();   
 		System.out.println("예약 번호를 입력해주세요");
 		int reserveCode = sc.nextInt();
 

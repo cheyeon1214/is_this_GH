@@ -34,6 +34,121 @@ public class GHServiceTest {
 		service.addEvent(new FishingEvent("Fishing",new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
 		service.addEvent(new PartyEvent("Party", new MyTime(6, 30, 00), new MyTime(11, 50, 00), "소주, 맥주"));
 		
+		// 5월 13일 - 여성 2, 남성 1
+	    service.addReservation(new MyDate(2025, 5, 13),
+	        new Customer("김민지", 'f', "010-1234-5678"),
+	        service.getAllRooms().get(0), true, 2, 1234, service.getAllEvents().get(0));
+	    service.addReservation(new MyDate(2025, 5, 13),
+	        new Customer("정예린", 'f', "010-5678-9012"),
+	        service.getAllRooms().get(1), false, 1, 2345, service.getAllEvents().get(1));
+	    service.addReservation(new MyDate(2025, 5, 13),
+	        new Customer("이준호", 'm', "010-2345-6789"),
+	        service.getAllRooms().get(2), true, 1, 3456, service.getAllEvents().get(2));
+	    // 5월 14일 - 여성 2, 남성 1
+	    service.addReservation(new MyDate(2025, 5, 14),
+	        new Customer("박서연", 'f', "010-3456-7890"),
+	        service.getAllRooms().get(0), true, 3, 4567, service.getAllEvents().get(0));
+	    service.addReservation(new MyDate(2025, 5, 14),
+	        new Customer("윤서아", 'f', "010-7890-1234"),
+	        service.getAllRooms().get(1), false, 1, 5678, service.getAllEvents().get(1));
+	    service.addReservation(new MyDate(2025, 5, 14),
+	        new Customer("최현우", 'm', "010-4567-8901"),
+	        service.getAllRooms().get(3), true, 2, 6789, service.getAllEvents().get(2));
+	    // 5월 15일 - 여성 2, 남성 1
+	    service.addReservation(new MyDate(2025, 5, 15),
+	        new Customer("배지은", 'f', "010-9012-3456"),
+	        service.getAllRooms().get(0), true, 2, 7890, service.getAllEvents().get(0));
+	    service.addReservation(new MyDate(2025, 5, 15),
+	        new Customer("서하윤", 'f', "010-1122-3344"),
+	        service.getAllRooms().get(1), false, 1, 8901, service.getAllEvents().get(1));
+	    service.addReservation(new MyDate(2025, 5, 15),
+	        new Customer("장우진", 'm', "010-8901-2345"),
+	        service.getAllRooms().get(2), true, 3, 9012, service.getAllEvents().get(2));
+		
+		service.addReservation(
+			new MyDate(2025, 5, 16),
+			new Customer("곽채연", 'f', "010-5582-1857"),
+			service.getAllRooms().get(0),
+			false,
+			2,
+			1923,
+			service.getAllEvents().get(0)
+		);
+		service.addReservation(
+			new MyDate(2025, 5, 17),
+			new Customer("곽채언", 'f', "010-5581-8857"),
+			service.getAllRooms().get(1),
+			true,
+			2,
+			5832,
+			service.getAllEvents().get(2)
+		);
+		service.addReservation(
+		  new MyDate(2025, 5, 18),
+		  new Customer("곽채은", 'f', "010-5822-1117"),
+		  service.getAllRooms().get(0),
+		  false,
+		  2,
+		  4110,
+		  service.getAllEvents().get(1)
+		);
+		service.addReservation(
+			new MyDate(2025, 5, 16),
+			new Customer("이지은", 'f', "010-2211-3366"),
+			service.getAllRooms().get(1),
+			true,
+			2,
+			7234,
+			service.getAllEvents().get(0)
+		);
+		service.addReservation(
+		  new MyDate(2025, 5, 17),
+		  new Customer("이지연", 'f', "010-2218-8471"),
+		  service.getAllRooms().get(1),
+		  false,
+		  2,
+		  8541,
+		  service.getAllEvents().get(1)
+		);
+		service.addReservation(
+		  new MyDate(2025, 5, 18),
+		  new Customer("이지아", 'f', "010-2819-0172"),
+		  service.getAllRooms().get(0),
+		  true,
+		  2,
+		  3790,
+		  service.getAllEvents().get(2)
+		);
+		service.addReservation(
+		  new MyDate(2025, 5, 16),
+		  new Customer("김민서", 'm', "010-1123-2918"),
+		  service.getAllRooms().get(2),
+		  false,
+		  2,
+	      6481,
+		  service.getAllEvents().get(1)
+		);
+	service.addReservation(
+	  new MyDate(2025, 5, 17),
+	  new Customer("김민상", 'm', "010-1234-5678"),
+		service.getAllRooms().get(3),
+	  true,
+	  2,
+	  9012,
+	  service.getAllEvents().get(0)
+	);
+	service.addReservation(
+	  new MyDate(2025, 5, 18),
+	  new Customer("김민승", 'm', "010-2819-9918"),
+	  service.getAllRooms().get(2),
+	  true,
+	  2,
+	  7345,
+	  service.getAllEvents().get(2)
+	);
+				  
+				
+		
 		boolean runFlag = true;
 		while (runFlag) {
 			System.out.println(

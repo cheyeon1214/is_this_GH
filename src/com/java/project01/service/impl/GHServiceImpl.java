@@ -104,7 +104,6 @@ public class GHServiceImpl implements GHService {
 
 	@Override
 	public void updateReserve(int code, Reservation reserve) throws RecordNotFoundException {
-		// update된 정보가 있는지 판단 여부
 		boolean isUpdated = false;
 
 		for (int i = 0; i < reservations.size(); i++) {
@@ -124,7 +123,6 @@ public class GHServiceImpl implements GHService {
 	// 비지니스 로직
 	@Override
 	public Room mostPopularRoom() {
-	    System.out.println("현재 예약 수: " + reservations.size());
 	    if (reservations.isEmpty()) {
 	        throw new NullPointerException("예약된 정보가 없어, 인기 방을 계산할 수 없습니다.");
 	    }
@@ -146,7 +144,7 @@ public class GHServiceImpl implements GHService {
 	            return room; // 최신 인기 방 반환
 	        }
 	    }
-	    return null; // 예외는 이미 위에서 걸렀으므로 도달하지 않음
+	    return null;
 	}
 
 	@Override

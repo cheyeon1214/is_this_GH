@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.java.project01.exception.RecordNotFoundException;
 import com.java.project01.service.GHService;
 import com.java.project01.util.MyDate;
 import com.java.project01.vo.Customer;
@@ -66,35 +67,48 @@ public class GHServiceImpl implements GHService{
 	}
 	
 	@Override
-	public Reservation checkMyReserve(int code) {
+	public Reservation checkMyReserve(int code) throws RecordNotFoundException {
 		for (Reservation r : reservations) {
 			if (r.getReserveCode() == code) {
 				return r;
 			}
 		}
-		return null;
+		throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
 	}
 	
 	@Override
-	public void deleteReserve(int code) {
+	public void deleteReserve(int code) throws RecordNotFoundException {
 		boolean isDeleted = false;
 		
 		for (Reservation r : reservations) {
 			if (r.getReserveCode() == code) {
 				isDeleted = reservations.remove(r);
+				break;
 			}
 		}
-		
-		System.out.println(isDeleted ? "삭제 완료" : "해당 예약 번호가 없습니다.");
+		if(!isDeleted) {
+			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다. :: 삭제 실패");
+		}
+		System.out.println("예약 취소를 완료하였습니다.");
 	}
 	
 	@Override
-	public void updateReserve(int code, Reservation reserve) {
+	public void updateReserve(int code, Reservation reserve) throws RecordNotFoundException {
+		// update된 정보가 있는지 판단 여부
+		boolean isUpdated = false;
+		
 		for (int i = 0; i < reservations.size(); i++) {
 			if (reservations.get(i).getReserveCode() == code) {
 				reservations.set(i, reserve);
+				isUpdated = true;
 			}
 		}
+		
+		if (!isUpdated) {
+	        throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다. :: 고객 정보 업데이트 실패");
+	    }
+		
+		System.out.println("예약 번호(" + code + ") 고객의 정보를 수정 완료하였습니다.");
 	}
 	
 	

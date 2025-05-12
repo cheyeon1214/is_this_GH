@@ -17,7 +17,19 @@ public interface GHService extends AnalysisService, ReserveService, SearchServic
 	 * @throws IOException 
 	 */
 	String getBreakfastInfo() throws IOException;
+	/**
+	 * 현재 모든 예약 목록을 반환함
+	 * @return 예약 목록
+	 */
 	List<Reservation> getAllReservations();
+	/**
+	 * 게스트하우스 방을 추가
+	 * @param room 방
+	 */
 	void addRoom(Room room);
+	/**
+	 * 게스트하우스 이벤트를 추가
+	 * @param event 이벤트
+	 */
 	void addEvent(Event event);
 }

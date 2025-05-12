@@ -94,7 +94,7 @@ public class Reservation {
 	 * 조식 유무를 반환함
 	 * @return true 이면 조식 YES, false 이면 조식 예약 NO
 	 */
-	public boolean isBreakfast() {
+	public boolean getIsBreakfast() {
 		return isBreakfast;
 	}
 	/**

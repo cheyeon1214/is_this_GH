@@ -11,7 +11,7 @@ public class RecordNotFoundException extends Exception{
 	 * message를 생성하지 않고 바로 예외사항이 출력되도록 합니다.
 	 */
 	public RecordNotFoundException() {
-		this("해당 데이터를 찾을 수 없습니다.");
+		this("해당 정보를 찾을 수 없습니다. :: Record Not Found");
 	}
 	
 	/**

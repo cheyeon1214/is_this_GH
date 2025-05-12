@@ -117,9 +117,12 @@ public class GHServiceImpl implements GHService{
 	@Override
 	public Room mostPopularRoom() {
 		System.out.println("현재 예약 수: " + reservations.size());
+		
 		Room pRoom = null;
 		
-		if (reservations.isEmpty()) return null;
+		if (reservations.isEmpty()) {
+			throw new NullPointerException("예약된 정보가 없어, 인기 방을 계산할 수 없습니다.");
+		};
 		
 		List<Integer> pList = new ArrayList<>();
 		

@@ -61,7 +61,7 @@ public class BBQEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "BBQEvent [equipment=" + equipment + ", food=" + food + "]";
+		return "BBQEvent [장비 : " + equipment + ", 음식 : " + food + "]";
 	}
 
 }

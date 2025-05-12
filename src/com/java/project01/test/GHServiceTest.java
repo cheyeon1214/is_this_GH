@@ -149,7 +149,7 @@ public class GHServiceTest {
 				runFlag = false;
 				return;
 			default:
-				System.out.println("잘못된 숫자를 입력하셨습니다. 다시 입력하십시오.");
+				System.out.println("잘못된 숫자를 입력하셨습니다. 다시 입력해주세요.");
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public class GHServiceTest {
 
 	public static void printMostPopular() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		System.out.println("제일 인기있는 방을 소개합니다");
+		System.out.println("제일 인기있는 방을 소개합니다!");
 
 		// null 예외처리 추가 !!
 		try {
@@ -460,7 +460,7 @@ public class GHServiceTest {
 
 		try {
 			Reservation r = service.checkMyReserve(reserveCode);
-			System.out.println("예약 정보 : " + r);
+			System.out.println("***예약 정보***"+ r);
 		} catch (RecordNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -633,5 +633,4 @@ public class GHServiceTest {
 			System.out.println(e.getMessage());
 		}
 	}
-
 }

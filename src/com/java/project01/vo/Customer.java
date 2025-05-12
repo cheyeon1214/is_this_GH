@@ -71,7 +71,7 @@ public class Customer {
 	 */
 	@Override
 	public String toString() {
-		return "Customer [name=" + name + ", gender=" + gender + ", phoneNumber=" + phoneNumber + "]";
+		return "[이름 : " + name + ", 성별 : " + gender + ", 전화번호 : " + phoneNumber + "]";
 	}
 	
 	

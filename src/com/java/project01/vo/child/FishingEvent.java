@@ -60,7 +60,7 @@ public class FishingEvent extends Event{
 
 	@Override
 	public String toString() {
-		return "fishingEvent [isBoat=" + isBoat + ", area=" + area + "]";
+		return "FishingEvent [보트 탑승 여부 : " + isBoat + ", 지역 : " + area + "]";
 	}
 	
 	

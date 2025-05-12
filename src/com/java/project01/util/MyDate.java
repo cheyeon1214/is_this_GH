@@ -113,7 +113,7 @@ public class MyDate implements Comparable<MyDate>{
 	
 	@Override
 	public String toString() {
-		return "MyDate [year=" + year + ", month=" + month + ", day=" + day + "]";
+		return year + "년 " + month + "월 " + day + "일";
 	}
 	
 	

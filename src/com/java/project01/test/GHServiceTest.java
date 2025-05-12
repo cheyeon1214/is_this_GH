@@ -1,5 +1,6 @@
 package com.java.project01.test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -149,6 +150,18 @@ public class GHServiceTest {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("날짜를 입력해주세요."); //나중에 년,월 받고 매진 안된 날짜 출력되는 형식으로 upgrade
 		MyDate wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
+		LocalDate nowDate = LocalDate.now();
+		
+		// 예약 날짜가 오늘보다 앞인 경우
+		if (!wantDate.isCorrectDate() ||
+			wantDate.getYear() < nowDate.getYear() ||
+			wantDate.getMonth() < nowDate.getMonthValue() ||
+			wantDate.getDay() < nowDate.getDayOfMonth()
+		) {
+			System.out.println("날짜가 잘못 입력되었습니다." + "오늘은 " + nowDate.getYear() + "년 " +  nowDate.getMonthValue() + "월 "
+					+ nowDate.getDayOfMonth() + "일 입니다.");
+			return;
+		}
 		
 		boolean reserveFlag = true;
 		while(reserveFlag) {
@@ -186,7 +199,8 @@ public class GHServiceTest {
 		HashMap<Room,Integer> roomMapByDate = service.roomsByDate(wantDate);
 		
 		for(Room r: roomList) {
-			System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+			System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")" + 
+					(roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
 			i++;
 		}
 	}
@@ -203,7 +217,8 @@ public class GHServiceTest {
 		
 		for(Room r: roomList) {
 			if(r.getMaxCount() == count)
-				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")" + 
+						(roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
 			i++;
 		}
 		
@@ -217,6 +232,8 @@ public class GHServiceTest {
 		System.out.println("예약자분 성별(여/남): ");
 		String input = "";
 		char gender;
+		
+		
 
 		while(true) {
 			input = sc.next();
@@ -247,7 +264,8 @@ public class GHServiceTest {
 		
 		for(Room r: roomList) {
 			if(r.getGender() == gender) {
-				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")");
+				System.out.println(i+". "+r.getName() + "("+ roomMapByDate.get(r)+"/"+r.getMaxCount()+")" + 
+						(roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
 				i++;
 			}
 		}
@@ -261,6 +279,7 @@ public class GHServiceTest {
 		while (!validRoom) {
 		    int roomChoice = sc.nextInt();
 		    
+		    // 뒤로가기
 		    if (roomChoice == -1) {
 		    	System.out.println("예약 선택을 취소합니다.");
 		    	return;

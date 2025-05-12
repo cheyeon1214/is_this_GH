@@ -3,6 +3,7 @@ package com.java.project01.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.java.project01.exception.RecordNotFoundException;
 import com.java.project01.util.MyDate;
 import com.java.project01.vo.Reservation;
 import com.java.project01.vo.Room;
@@ -16,7 +17,7 @@ public interface SearchService {
 	 * @param code 예약번호
 	 * @return 해당하는 예약 객체
 	 */
-	Reservation checkMyReserve(int code);
+	Reservation checkMyReserve(int code) throws RecordNotFoundException;
 	
 	/**
 	 * 해당하는 날짜의 예약가능한 방 목록을 반환함

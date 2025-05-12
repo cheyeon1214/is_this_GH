@@ -58,7 +58,7 @@ public class PartyEvent extends Event{
 
 	@Override
 	public String toString() {
-		return "PartyEvent [ food=" + food + "]";
+		return "PartyEvent [음식 : " + food + "]";
 	}
 	
 	

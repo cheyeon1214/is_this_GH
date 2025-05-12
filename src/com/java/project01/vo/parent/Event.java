@@ -122,8 +122,8 @@ public abstract class Event {
 
 	@Override
 	public String toString() {
-		return "Event [price=" + price + ", eventType=" + eventType +", startTime=" + startTime + ", endTime="
-				+ endTime + "]";
+		return "Event 정보 [이벤트 종류 : " + eventType + ", 가격" + price +", 시작 시간 : " + startTime 
+				+ ", 종료 시간 : " + endTime + "]";
 	}
 	
 	

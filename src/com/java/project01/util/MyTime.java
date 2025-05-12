@@ -82,6 +82,6 @@ public class MyTime {
 	
 	@Override
 	public String toString() {
-		return "MyTime [hour=" + hour + ", minute=" + minute + ", seconds=" + seconds + "]";
+		return "시간 [시 : " + hour + ", 분 : " + minute + ", 초 : " + seconds + "]";
 	}
 }

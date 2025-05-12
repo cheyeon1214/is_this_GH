@@ -153,8 +153,8 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "방 이름:" + name + ", 방 가격:" + price + ", 방 정보:" + info + ", 전용 성별:" + gender + ", 인원수:"
-				+ maxCount + ", 가구 정보:" + funiture;
+		return "방 이름 : " + name + ", 방 가격 : " + price + ", 방 옵션 : " + info + "\n전용 성별 : " + gender + ", 수용인원 : "
+				+ maxCount + ", 가구 정보 : " + funiture;
 	}
 	
 	@Override

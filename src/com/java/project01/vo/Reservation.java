@@ -142,8 +142,14 @@ public class Reservation {
 	 */
 	@Override
 	public String toString() {
-		return "예약 정보 [예약 코드:" + reserveCode + ", 방 정보:" + room + ", date:" + date + ", 사용자 정보:"
-				+ customer + ", 조식 유무:" + isBreakfast + ", 인원수:" + people + ", 이벤트:" + event + "]";
+		/*
+		 * return "\n예약 번호 :" + reserveCode + ", 방 정보\n" + room + ", date :" + date +
+		 * "\n사용자 정보 :" + customer + ", 조식 유무 :" + isBreakfast + ", 인원수 :" + people +
+		 * ", 이벤트 :" + event + "]";
+		 */
+		
+		return "\n예약 번호 : " + reserveCode + "\n방 정보-> " + room + "\n예약 날짜 : " + date + "\n사용자 정보-> " + customer 
+				+ "\n조식 유무 : " + (isBreakfast == true ? "신청" : "미신청") + "\n예약 인원수 : " + people + "\n이벤트 " + (event == null ? "미참여" : event);
 	}
 	
 	

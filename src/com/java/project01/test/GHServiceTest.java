@@ -166,7 +166,6 @@ public class GHServiceTest {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("제일 인기있는 방을 소개합니다!");
 
-		// null 예외처리 추가 !!
 		try {
 			System.out.println(service.mostPopularRoom());
 		} catch (NullPointerException e) {
@@ -178,8 +177,10 @@ public class GHServiceTest {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("예약이 마감된 날짜입니다.");
 
-		// null 예외처리 추가 !!
-		System.out.println(service.soldOutDate());
+		if (service.soldOutDate().size() == 0) 
+			System.out.println("예약이 마감된 날짜가 없습니다.");
+		else
+			System.out.println(service.soldOutDate());
 	}
 
 	public static void printAllEvents() {
@@ -192,7 +193,7 @@ public class GHServiceTest {
 
 	public static void printBreakfast() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		// 조식 메뉴는 파일입출력으로...
+
 		try {
 			System.out.println(service.getBreakfastInfo());
 		} catch (IOException e) {
@@ -203,7 +204,7 @@ public class GHServiceTest {
 	public static void reserveGH() {
 		// 예약을 하는 곳
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		System.out.println("날짜를 입력해주세요."); // 나중에 년,월 받고 매진 안된 날짜 출력되는 형식으로 upgrade
+		System.out.println("날짜를 입력해주세요.");
 		MyDate wantDate = null;
 		try {
 			wantDate = new MyDate(sc.nextInt(), sc.nextInt(), sc.nextInt());
@@ -219,6 +220,11 @@ public class GHServiceTest {
 				|| wantDate.getMonth() < nowDate.getMonthValue() || wantDate.getDay() < nowDate.getDayOfMonth()) {
 			System.out.println("날짜가 잘못 입력되었습니다." + "오늘은 " + nowDate.getYear() + "년 " + nowDate.getMonthValue() + "월 "
 					+ nowDate.getDayOfMonth() + "일 입니다.");
+			return;
+		}
+		
+		if (service.soldOutDate().contains(wantDate)) {
+			System.out.println("해당 일자는 예약이 마감되었습니다.");
 			return;
 		}
 
@@ -256,7 +262,7 @@ public class GHServiceTest {
 
 		for (Room r : roomList) {
 			System.out.println(i + ". " + r.getName() + "(" + roomMapByDate.get(r) + "/" + r.getMaxCount() + ")"
-					+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
+					+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 마감" : ""));
 			i++;
 		}
 	}
@@ -274,7 +280,7 @@ public class GHServiceTest {
 		for (Room r : roomList) {
 			if (r.getMaxCount() == count)
 				System.out.println(i + ". " + r.getName() + "(" + roomMapByDate.get(r) + "/" + r.getMaxCount() + ")"
-						+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
+						+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 마감" : ""));
 			i++;
 		}
 
@@ -319,14 +325,13 @@ public class GHServiceTest {
 		for (Room r : roomList) {
 			if (r.getGender() == gender) {
 				System.out.println(i + ". " + r.getName() + "(" + roomMapByDate.get(r) + "/" + r.getMaxCount() + ")"
-						+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 만석" : ""));
+						+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 마감" : ""));
 				i++;
 			}
 		}
 
 		System.out.println("예약을 원하지 않으시면 -1을 입력하십시오.");
 
-		// 이 때 방 현황보고 뒤로가기 하는 것도 생각해야 함.
 		Room reserveRoom = null;
 		boolean validRoom = false;
 
@@ -512,8 +517,6 @@ public class GHServiceTest {
 		}
 	}
 
-	// Update 로직 함수
-	// 사용자 정보 수정
 	private static Customer updateCustomer(Customer changeCustomer) {
 		System.out.println("예약자 정보를 다시 입력받습니다.");
 		System.out.println("이름을 입력해 주세요: ");
@@ -522,8 +525,7 @@ public class GHServiceTest {
 		String phoneString = sc.next();
 		return new Customer(tempName, changeCustomer.getGender(), phoneString);
 	}
-
-	// 시용자 조식 여부 수정
+	
 	private static boolean isBreakfastOption(boolean currentIsBreakfast) {
 		while (true) {
 			System.out.println("회원님의 조식 현황입니다.");
@@ -542,7 +544,6 @@ public class GHServiceTest {
 		}
 	}
 
-	// 사용자 이벤트 참여 여부 수정
 	private static Event updateEvent(Reservation originRes) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		
@@ -596,7 +597,6 @@ public class GHServiceTest {
 					}
 				}
 			} else if (answer2.equals("아니요")) {
-				// 기존 고객이 선택한 Event 
 				return currentEvent;
 			} else {
 				System.out.println("잘못된 값을 입력하셨습니다. 다시 입력해주세요.");
@@ -610,11 +610,9 @@ public class GHServiceTest {
 		int reserveCode = sc.nextInt();
 
 		try {
-			// 예약 정보 출력
 			System.out.println("회원님의 에약 정보입니다.");
 			System.out.println(service.checkMyReserve(reserveCode));
 
-			// 예약 취소 여부
 			System.out.println("정말 예약을 취소하시겠습니까?(네/아니요)");
 			String confirm = sc.next();
 
@@ -626,7 +624,6 @@ public class GHServiceTest {
 				return;
 			}
 
-			// 예약 삭제
 			service.deleteReserve(reserveCode);
 			System.out.println("( " + reserveCode + " )의 예약을 삭제하였습니다.");
 		} catch (RecordNotFoundException e) {

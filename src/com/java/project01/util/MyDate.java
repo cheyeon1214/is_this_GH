@@ -116,13 +116,18 @@ public class MyDate implements Comparable<MyDate>{
 		return year + "년 " + month + "월 " + day + "일";
 	}
 	
-	
+	/**
+	 * 년, 월, 일이 같은 경우 true, 아니라면 false
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		MyDate other = (MyDate) obj;
 		return this.year == other.year && this.month == other.month && this.day == other.day;
 	}
 	
+	/**
+	 * 년, 월, 일 순으로 비교하여 먼저 오는 년이 더 작은 날짜로 함
+	 */
 	@Override
 	public int compareTo(MyDate o) {
 		if (this.year != o.year) 

@@ -236,27 +236,20 @@ public class GHServiceImpl implements GHService {
 
 	@Override
 	public HashMap<Event, Integer> eventsByDate(MyDate date) {
-		HashMap<Event, Integer> eventsHeadCount = new HashMap<>();
-		List<Reservation> dateReserve = new ArrayList<>();
-
-		for (Event e : events) {
-			eventsHeadCount.put(e, 0);
-		}
-
-		for (Reservation r : reservations) {
-			if (r.getDate().equals(date)) {
-				dateReserve.add(r);
-			}
-		}
-
-		for (Reservation r : dateReserve) {
-		    Event event = r.getEvent();
-		    int eventHead = eventsHeadCount.getOrDefault(event, 0);
-		    eventsHeadCount.put(event, eventHead + r.getPeople());
-		}
+		HashMap<Event, Integer> eventHeadCounts = reservations
+				.stream()
+		        .filter(r -> r.getDate().equals(date))   
+		        .filter(r -> r.getEvent() != null)
+		        .collect(Collectors.groupingBy(
+		        		Reservation::getEvent,
+		        		HashMap::new,
+		        		Collectors.summingInt(Reservation::getPeople)
+		        ));
+		
+		events.forEach((e) -> eventHeadCounts.putIfAbsent(e, 0));
 
 
-		return eventsHeadCount;
+		return eventHeadCounts;
 	}
 
 	@Override

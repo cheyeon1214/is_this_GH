@@ -10,9 +10,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.java.project01.exception.RecordNotFoundException;
 import com.java.project01.service.GHService;
@@ -92,20 +94,17 @@ public class GHServiceImpl implements GHService {
 
 	@Override
 	public void deleteReserve(int code) throws RecordNotFoundException {
-		boolean isDeleted = false;
+	    Optional<Reservation> target = reservations.stream()
+	        .filter(r -> r.getReserveCode() == code)
+	        .findFirst();
 
-		for (Reservation r : reservations) {
-			if (r.getReserveCode() == code) {
-				isDeleted = reservations.remove(r);
-				break;
-			}
-		}
-		if (!isDeleted) {
-			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다. :: 삭제 실패");
-		}
-		System.out.println("예약 취소를 완료하였습니다.");
+	    if (target.isPresent()) {
+	        reservations.remove(target.get());
+	        System.out.println("예약 취소를 완료하였습니다.");
+	    } else {
+	        throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다. :: 삭제 실패");
+	    }
 	}
-
 	@Override
 	public void updateReserve(int code, Reservation reserve) throws RecordNotFoundException {
 		boolean isUpdated = false;
@@ -133,19 +132,10 @@ public class GHServiceImpl implements GHService {
 	    if (reservations.isEmpty()) {
 	        throw new NullPointerException("예약된 정보가 없어, 인기 방을 계산할 수 없습니다.");
 	    }
-	    Map<Room, Integer> roomCountMap = new HashMap<>();
-	    
-	    	   
-	    for (Room room : rooms) {
-	        roomCountMap.put(room, 0);
-	    }
-	    
-	    for (Reservation r : reservations) {
-	        Room room = r.getRoom();
-	        roomCountMap.put(room, roomCountMap.getOrDefault(room, 0) + 1);
-	    }
+	    Map<Room, Long> roomCountMap = reservations.stream()
+	    .collect(Collectors.groupingBy(Reservation::getRoom, Collectors.counting()));
 	    // 가장 많이 예약된 횟수 계산
-	    int maxCount = Collections.max(roomCountMap.values());
+	    Long maxCount = Collections.max(roomCountMap.values());
 	    
 	    // 뒤에서부터 순회하면서 최신 예약된 인기 방 찾기
 	    for (int i = reservations.size() - 1; i >= 0; i--) {
@@ -154,6 +144,12 @@ public class GHServiceImpl implements GHService {
 	            return room; // 최신 인기 방 반환
 	        }
 	    }
+//	    Optional<Room> mostRecentPopularRoom = IntStream.range(0, reservations.size())
+//	    	    .mapToObj(i -> reservations.get(reservations.size() - 1 - i)) // 역순 스트림
+//	    	    .map(Reservation::getRoom)
+//	    	    .filter(room -> roomCountMap.get(room) == maxCount)
+//	    	    .findFirst();
+	    
 	    
 	    return null;
 	}
@@ -161,78 +157,43 @@ public class GHServiceImpl implements GHService {
 	@Override
 	public List<MyDate> soldOutDate() {
 		List<MyDate> soldOutDateList = new ArrayList<>();
-		TreeSet<MyDate> dateTreeSet = new TreeSet<>();
-		boolean isFullyBooked;
 
-		for (Reservation r : reservations) {
-			dateTreeSet.add(r.getDate());
-		}
-
-		for (MyDate d : dateTreeSet) {
-			HashMap<Room, Integer> roomsByDateMap = roomsByDate(d);
-			Set<Room> rooms = roomsByDateMap.keySet();
-			isFullyBooked = true;
-
-			for (Room r : rooms) {
-				if (roomsByDateMap.get(r) != r.getMaxCount()) {
-					isFullyBooked = false;
-					break;
-				}
-			}
-
-			if (isFullyBooked)
-				soldOutDateList.add(d);
-		}
+		TreeSet<MyDate> dateTreeSet = reservations.stream()
+                .map(Reservation::getDate)
+                .collect(Collectors.toCollection(TreeSet::new));
+		
+		soldOutDateList.addAll(
+			    dateTreeSet.stream()
+			        .filter(d -> {
+			            return roomsByDate(d).entrySet().stream()
+			                   .allMatch(entry -> entry.getValue().equals(entry.getKey().getMaxCount()));
+			        })
+			        .toList()
+			);
 
 		return soldOutDateList;
 	}
 
 	@Override
 	public HashMap<Room, Integer> roomsByDate(MyDate date) {
-		HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
-		List<Reservation> dateReserve = new ArrayList<>();
+	    HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
 
-		for (Room r : rooms) {
-			roomsHeadCount.put(r, 0);
-		}
+	    // 1. 모든 방을 0으로 초기화
+	    for (Room r : rooms) {
+	        roomsHeadCount.put(r, 0);
+	    }
 
-		for (Reservation r : reservations) {
-			if (r.getDate().equals(date)) {
-				dateReserve.add(r);
-			}
-		}
+	    // 2. 해당 날짜의 예약만 반영해서 인원 누적
+	    reservations.stream()
+	        .filter(r -> r.getDate().equals(date))
+	        .forEach(r -> {
+	            Room room = r.getRoom();
+	            roomsHeadCount.put(room, roomsHeadCount.get(room) + r.getPeople());
+	        });
 
-		for (Reservation r : dateReserve) {
-			Room room = r.getRoom();
-			int current = roomsHeadCount.getOrDefault(room, 0);
-			roomsHeadCount.put(room, current + r.getPeople());
-		}
-
-
-		return roomsHeadCount;
+	    return roomsHeadCount;
 	}
 
-	@Override
-	public HashMap<Room, Integer> roomsByDate(MyDate date, int people) {
-		HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
-		List<Reservation> dateReserve = new ArrayList<>();
-
-		for (Room r : rooms) {
-			roomsHeadCount.put(r, 0);
-		}
-
-		for (Reservation r : reservations) {
-			if (r.getDate().equals(date)) {
-				dateReserve.add(r);
-			}
-		}
-
-		for (Reservation r : dateReserve) {
-			roomsHeadCount.put(r.getRoom(), roomsHeadCount.get(r.getRoom()) + r.getPeople());
-		}
-
-		return roomsHeadCount;
-	}
 
 	@Override
 	public HashMap<Event, Integer> eventsByDate(MyDate date) {

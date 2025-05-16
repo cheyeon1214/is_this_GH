@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.java.project01.exception.InvalidInputDataException;
 import com.java.project01.exception.RecordNotFoundException;
@@ -30,10 +32,10 @@ public class GHServiceTest {
 
 	public static void main(String[] args) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
-		service.addRoom(new Room("여성 방 201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("여성 방 202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
-		service.addRoom(new Room("남성 방 301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
-		service.addRoom(new Room("남성 방 302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("201호", 48000.0, "실내화장실,오션뷰", 'f', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("202호", 40000.0, "공용화장실", 'f', 8, "이층침대4, 책상2, 화장실x"));
+		service.addRoom(new Room("301호", 50000.0, "실내화장실,오션뷰", 'm', 4, "이층침대2, 책상1, 화장실1"));
+		service.addRoom(new Room("302호", 40000.0, "공용화장실,공용탁자", 'm', 8, "이층침대4, 책상2, 화장실x"));
 
 		service.addEvent(new BBQEvent("BBQ", new MyTime(6, 10, 00), new MyTime(11, 30, 00), "화로", "돼지고기, 소고기"));
 		service.addEvent(new FishingEvent("Fishing", new MyTime(7, 10, 00), new MyTime(10, 30, 00), false, "게하 앞 시내"));
@@ -157,9 +159,16 @@ public class GHServiceTest {
 	public static void printAllRooms() {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println("**모든 방 정보**");
-		for (Room r : service.getAllRooms())
-			System.out.println(r);
-
+		
+		/* 기존 코드
+		 * for (Room r : service.getAllRooms()) 
+		 * 	System.out.println(r);
+		 */
+		
+		// 모든 방 객체를 출력하는데 방의 이름을 오름차순으로 정렬하여 출력한다.
+		service.getAllRooms().stream()
+		.sorted(Comparator.comparing(Room::getName))
+		.forEach(room -> System.out.println(room));
 	}
 
 	public static void printMostPopular() {
@@ -256,15 +265,33 @@ public class GHServiceTest {
 	private static void printReserveByDate(MyDate wantDate) {
 		GHServiceImpl service = GHServiceImpl.getInstance();
 		System.out.println(wantDate.getMonth() + "월 " + wantDate.getDay() + "일 기준, 방 예약 현황입니다.");
+		
 		List<Room> roomList = service.getAllRooms();
+		
+		// 기존 코드
+		
 		int i = 1;
 		HashMap<Room, Integer> roomMapByDate = service.roomsByDate(wantDate);
-
 		for (Room r : roomList) {
-			System.out.println(i + ". " + r.getName() + "(" + roomMapByDate.get(r) + "/" + r.getMaxCount() + ")"
+			System.out.println(i + ". " + r.getName() + "(" + roomMapByDate.get(r) + "/" + r.getMaxCount() +
+					")"
 					+ (roomMapByDate.get(r) == r.getMaxCount() ? " - 마감" : ""));
 			i++;
 		}
+		
+		
+		
+		// 이벤트 목록을 스트림으로 변환하고 이벤트에 참여하는 인원수를 기준으로 가장 적은 순으로 정렬하여 출력하도록 한다.
+//		i =1;
+//		roomList.stream()
+//				.sorted(Comparator.comparingInt(room-> roomMapByDate.get(room)))
+//				.collect(Collectors.groupingBy(
+//						(room) -> room, Collectors.summingInt(n -> n++)
+//				))
+//				.forEach((room, j) -> { 
+//					System.out.println(j + ". " + room.getName() + "(" + roomMapByDate.get(room) + "/" + room.getMaxCount() + ")"
+//				+ (roomMapByDate.get(room) == room.getMaxCount() ? " - 마감" : ""));
+//				});
 	}
 
 	private static void printReserveByCount(MyDate wantDate) {
@@ -423,6 +450,7 @@ public class GHServiceTest {
 			}
 		}
 
+		// 기능으로 추출하는게 어떤지.
 		Set<Integer> usedCodes = new HashSet<>();
 		for (Reservation r : service.getAllReservations()) {
 			usedCodes.add(r.getReserveCode());

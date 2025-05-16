@@ -173,9 +173,9 @@ public class GHServiceImpl implements GHService {
 	    HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
 
 	    // 1. 모든 방을 0으로 초기화
-	    for (Room r : rooms) {
+	    for (Room r : rooms)
 	        roomsHeadCount.put(r, 0);
-	    }
+	    
 
 	    // 2. 해당 날짜의 예약만 반영해서 인원 누적
 	    reservations.stream()
@@ -202,7 +202,6 @@ public class GHServiceImpl implements GHService {
 		        ));
 		
 		events.forEach((e) -> eventHeadCounts.putIfAbsent(e, 0));
-
 
 		return eventHeadCounts;
 	}

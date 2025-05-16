@@ -114,14 +114,10 @@ public class GHServiceImpl implements GHService {
 		
 		if (target == null)
 			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
-				
-		reservations.forEach((r) -> {
-			if (r.getReserveCode() == code) {
-				r.setEvent(reserve.getEvent());
-				r.changeBreakfast(reserve.getIsBreakfast());
-				r.changeCustomer(reserve.getCustomer());
-			}
-		});
+		
+		int idx = reservations.indexOf(target);
+		
+		reservations.set(idx, reserve);
 
 		System.out.println("예약 번호(" + code + ") 고객의 정보를 수정 완료하였습니다.");
 	}

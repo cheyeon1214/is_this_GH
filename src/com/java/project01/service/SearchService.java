@@ -25,15 +25,7 @@ public interface SearchService {
 	 * @return 예약가능한 방 목록
 	 */
 	HashMap<Room, Integer> roomsByDate(MyDate date);
-	
-	/**
-	 * 해당하는 날짜의 인원수가 모두 들어갈 수 있는 예약가능한 방 목록을 반환함
-	 * @param date 예약날짜
-	 * @param people 인원수
-	 * @return 예약가능한 방 목록
-	 */
-	HashMap<Room, Integer> roomsByDate(MyDate date, int people);
-	
+
 	/**
 	 * 해당하는 날짜의 모든 이벤트 목록과 인원수를 반환함
 	 * @param date 날짜

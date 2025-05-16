@@ -81,15 +81,14 @@ public class GHServiceImpl implements GHService {
 
 	@Override
 	public Reservation checkMyReserve(int code) throws RecordNotFoundException {
-		Reservation myReservation = reservations.stream()
+		Optional<Reservation> myReservation = reservations.stream()
 												.filter((r) -> r.getReserveCode() == code)
-												.findFirst()
-												.get();
+												.findFirst();
 		
-		if (myReservation == null)
-			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
+		if (myReservation.isPresent())
+			return myReservation.get();			
 		else 
-			return myReservation;
+			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
 	}
 
 	@Override

@@ -107,21 +107,16 @@ public class GHServiceImpl implements GHService {
 	}
 	@Override
 	public void updateReserve(int code, Reservation reserve) throws RecordNotFoundException {
-		boolean isUpdated = false;
-
+	
 		// Java Stream은 기본적으로 "읽기(read-only)" 전용으로 설계되어 있어서 List의 요소를 직접 수정하는 용도로는 잘 사용하지 않음
-				
-		reservations.forEach((r) -> {
-			if (r.getReserveCode() == code) {
-				r.setEvent(reserve.getEvent());
-				r.changeBreakfast(reserve.getIsBreakfast());
-				r.changeCustomer(reserve.getCustomer());
-			}
-		});
-
-		if (!isUpdated) {
-			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다. :: 고객 정보 업데이트 실패");
-		}
+		Reservation target = checkMyReserve(code);
+		
+		if (target == null)
+			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
+		
+		int idx = reservations.indexOf(target);
+		
+		reservations.set(idx, reserve);
 
 		System.out.println("예약 번호(" + code + ") 고객의 정보를 수정 완료하였습니다.");
 	}

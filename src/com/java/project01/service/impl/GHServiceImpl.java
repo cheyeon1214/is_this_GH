@@ -81,15 +81,14 @@ public class GHServiceImpl implements GHService {
 
 	@Override
 	public Reservation checkMyReserve(int code) throws RecordNotFoundException {
-		Reservation myReservation = reservations.stream()
+		Optional<Reservation> myReservation = reservations.stream()
 												.filter((r) -> r.getReserveCode() == code)
-												.findFirst()
-												.get();
+												.findFirst();
 		
-		if (myReservation == null)
-			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
+		if (myReservation.isPresent())
+			return myReservation.get();			
 		else 
-			return myReservation;
+			throw new RecordNotFoundException("해당 예약 번호(" + code + ")에 대한 정보를 찾을 수 없습니다.");
 	}
 
 	@Override
@@ -174,9 +173,9 @@ public class GHServiceImpl implements GHService {
 	    HashMap<Room, Integer> roomsHeadCount = new HashMap<>();
 
 	    // 1. 모든 방을 0으로 초기화
-	    for (Room r : rooms) {
+	    for (Room r : rooms)
 	        roomsHeadCount.put(r, 0);
-	    }
+	    
 
 	    // 2. 해당 날짜의 예약만 반영해서 인원 누적
 	    reservations.stream()
@@ -203,7 +202,6 @@ public class GHServiceImpl implements GHService {
 		        ));
 		
 		events.forEach((e) -> eventHeadCounts.putIfAbsent(e, 0));
-
 
 		return eventHeadCounts;
 	}
